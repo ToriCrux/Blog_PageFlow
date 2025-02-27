@@ -17,4 +17,8 @@ public class CommentService {
     public Collection<Comment> getComments(){
         return commentRepository.getAllComments(Sort.by(Sort.Direction.ASC, "id"));
     }
+
+    public Comment createComment(Comment comment){
+        return commentRepository.save(comment);
+    }
 }

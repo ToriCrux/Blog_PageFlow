@@ -11,6 +11,8 @@ import java.util.Collection;
 @Repository
 public interface PostRepository extends CrudRepository<Post, Integer> {
 
+    // exemplos de queries que podem ser criadas além das
+    // queries default da classe CrudRepository
     @Query("from Post")
     Collection<Post> getAllPosts(Sort by);
 }

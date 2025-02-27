@@ -1,7 +1,11 @@
 package br.edu.infnet.pageflow.controller;
 
+import br.edu.infnet.pageflow.model.Author;
+import br.edu.infnet.pageflow.model.BlogAdministrator;
 import br.edu.infnet.pageflow.model.User;
+import br.edu.infnet.pageflow.model.Visitor;
 import br.edu.infnet.pageflow.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +20,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/list")
-    public ResponseEntity<Collection<User>> usersList() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    @GetMapping("/")
+    public ResponseEntity<Collection<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @GetMapping("/{id}")
@@ -28,12 +32,24 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+    // TODO fix code smell - repeated code - start//
+    @PostMapping("/administrator")
+    public ResponseEntity<User> createAdministrator(@RequestBody @Valid BlogAdministrator admin) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createBlogAdministrator(admin));
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/author")
+    public ResponseEntity<User> createAuthor(@RequestBody @Valid Author author) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createAuthor(author));
+    }
+
+    @PostMapping("/visitor")
+    public ResponseEntity<User> createVisitor(@RequestBody @Valid Visitor visitor) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createVisitor(visitor));
+    }
+    // TODO fix code smell - repeated code - end//
+
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();

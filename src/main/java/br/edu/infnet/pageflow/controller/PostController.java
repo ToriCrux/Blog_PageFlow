@@ -1,11 +1,13 @@
 package br.edu.infnet.pageflow.controller;
 
+import br.edu.infnet.pageflow.model.Post;
 import br.edu.infnet.pageflow.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/v1/api/posts")
@@ -15,9 +17,12 @@ public class PostController {
     private PostService postService;
 
     @GetMapping(value = "/")
-    public String postList(Model model) {
-        model.addAttribute("posts", postService.findAll());
-        return "posts";
+    public ResponseEntity<Collection<Post>> getAllPosts() {
+        return ResponseEntity.ok(postService.getPosts());
+    }
 
+    @PostMapping("/new")
+    public ResponseEntity<Post> createPost(@RequestBody Post post) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(post));
     }
 }

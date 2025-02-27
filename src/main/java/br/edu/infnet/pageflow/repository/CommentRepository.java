@@ -11,6 +11,8 @@ import java.util.Collection;
 @Repository
 public interface CommentRepository extends CrudRepository<Comment, Integer> {
 
+    // exemplos de queries que podem ser criadas além das
+    // queries default da classe CrudRepository
     @Query("from Comment")
-    Collection<Comment> getAllComments(Sort by);
+    Collection<Comment> getAllComments(Sort sort);
 }

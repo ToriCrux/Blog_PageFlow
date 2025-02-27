@@ -2,16 +2,21 @@ package br.edu.infnet.pageflow.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "user_type")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    @Column(nullable = false)
+    private String firstName;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -22,13 +27,21 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role; // Enum para diferenciar ADMIN e VISITOR
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-
-
+    @Column
+    private LocalDateTime updatedAt;
 
     // Getters e Setters
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
     public String getUsername() {
         return username;
@@ -53,13 +66,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
 }
