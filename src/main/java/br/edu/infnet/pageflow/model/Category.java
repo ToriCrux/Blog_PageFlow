@@ -2,9 +2,6 @@ package br.edu.infnet.pageflow.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-import java.util.UUID;
-
 @Entity
 @Table(name = "categories")
 public class Category {

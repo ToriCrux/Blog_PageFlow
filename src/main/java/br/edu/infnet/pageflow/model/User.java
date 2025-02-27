@@ -3,7 +3,6 @@ package br.edu.infnet.pageflow.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -34,7 +33,6 @@ public class User {
     private LocalDateTime updatedAt;
 
     // Getters e Setters
-
     public String getFirstName() {
         return firstName;
     }

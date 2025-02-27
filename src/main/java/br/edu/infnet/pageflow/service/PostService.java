@@ -15,9 +15,6 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     public Collection<Post> getPosts() {
         return postRepository.getAllPosts(Sort.by(Sort.Direction.ASC, "title"));
     }

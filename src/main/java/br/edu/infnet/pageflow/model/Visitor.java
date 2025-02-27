@@ -2,9 +2,6 @@ package br.edu.infnet.pageflow.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @DiscriminatorValue("VISITOR")
 public class Visitor extends User {
@@ -16,7 +13,7 @@ public class Visitor extends User {
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Comment> comments;
 
-
+    // Getters e Setters
     public Boolean getCanComment() {
         return canComment;
     }
