@@ -5,7 +5,6 @@ public class PostRequest {
     private String content;
     private Integer authorId;
 
-    // Getters e Setters
     public String getTitle() {
         return title;
     }
@@ -26,7 +25,4 @@ public class PostRequest {
         return authorId;
     }
 
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
-    }
 }
