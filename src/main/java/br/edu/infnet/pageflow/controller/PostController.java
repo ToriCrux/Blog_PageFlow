@@ -1,6 +1,6 @@
 package br.edu.infnet.pageflow.controller;
 
-import br.edu.infnet.pageflow.model.Post;
+import br.edu.infnet.pageflow.entities.Post;
 import br.edu.infnet.pageflow.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     public ResponseEntity<Collection<Post>> getAllPosts() {
         return ResponseEntity.ok(postService.getPosts());
     }

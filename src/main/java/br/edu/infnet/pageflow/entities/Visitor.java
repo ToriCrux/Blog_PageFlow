@@ -1,10 +1,10 @@
-package br.edu.infnet.pageflow.model;
+package br.edu.infnet.pageflow.entities;
 
 import jakarta.persistence.*;
 
 @Entity
 @DiscriminatorValue("VISITOR")
-public class Visitor extends User {
+public class Visitor extends BlogUser {
 
     @Column
     private Boolean canComment;

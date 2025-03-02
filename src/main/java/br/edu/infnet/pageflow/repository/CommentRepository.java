@@ -1,7 +1,6 @@
 package br.edu.infnet.pageflow.repository;
 
-import br.edu.infnet.pageflow.model.Comment;
-import org.springframework.data.domain.Sort;
+import br.edu.infnet.pageflow.entities.Comment;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -14,5 +13,5 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
     // exemplos de queries que podem ser criadas além das
     // queries default da classe CrudRepository
     @Query("from Comment")
-    Collection<Comment> getAllComments(Sort sort);
+    Collection<Comment> getAllComments();
 }

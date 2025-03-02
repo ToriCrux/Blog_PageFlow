@@ -1,11 +1,14 @@
 package br.edu.infnet.pageflow.service;
 
-import br.edu.infnet.pageflow.model.Author;
-import br.edu.infnet.pageflow.model.BlogAdministrator;
-import br.edu.infnet.pageflow.model.User;
-import br.edu.infnet.pageflow.model.Visitor;
+import br.edu.infnet.pageflow.dto.SignupRequest;
+import br.edu.infnet.pageflow.entities.Author;
+import br.edu.infnet.pageflow.entities.BlogAdministrator;
+import br.edu.infnet.pageflow.entities.BlogUser;
+import br.edu.infnet.pageflow.entities.Visitor;
 import br.edu.infnet.pageflow.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.edu.infnet.pageflow.utils.BlogUserRoles;
+import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -14,36 +17,52 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public Collection<User> getUsers() {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public Collection<BlogUser> getUsers() {
         return userRepository.getAllUsers();
     }
 
-    public Optional<User> getUserById(Integer id) {
+    public Optional<BlogUser> getUserById(Integer id) {
         return userRepository.findById(id);
     }
 
-    // TODO fix code smell - repeated code - start//
-    public User createBlogAdministrator(BlogAdministrator admin) {
-        return userRepository.save(admin);
-    }
+    public BlogUser createUser(SignupRequest signupRequest) {
 
-    public User createAuthor(Author author) {
-        return userRepository.save(author);
-    }
+        if(userRepository.existsByEmail(signupRequest.getEmail())) {
+            return null;
+        }
 
-    public User createVisitor(Visitor visitor) {
-        return userRepository.save(visitor);
+        BlogUser newBlogUser = instantiateUserByRole(signupRequest.getRole());
+        BeanUtils.copyProperties(signupRequest, newBlogUser);
+
+        String encodedPassword = passwordEncoder.encode(newBlogUser.getPassword());
+        newBlogUser.setPassword(encodedPassword);
+
+        userRepository.save(newBlogUser);
+        return newBlogUser;
     }
-    // TODO fix code smell - repeated code - end//
 
     public void deleteUser(Integer id) {
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("Usuário não encontrado!");
         }
         userRepository.deleteById(id);
+    }
+
+    private BlogUser instantiateUserByRole(BlogUserRoles role) {
+        return switch (role) {
+            case BlogUserRoles.ADMINISTRATOR -> new BlogAdministrator();
+            case BlogUserRoles.VISITOR -> new Visitor();
+            case BlogUserRoles.AUTHOR -> new Author();
+        };
     }
 
 }

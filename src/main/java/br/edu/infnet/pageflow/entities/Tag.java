@@ -1,4 +1,4 @@
-package br.edu.infnet.pageflow.model;
+package br.edu.infnet.pageflow.entities;
 
 import java.util.UUID;
 

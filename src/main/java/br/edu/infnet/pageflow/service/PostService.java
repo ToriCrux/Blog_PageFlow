@@ -1,10 +1,7 @@
 package br.edu.infnet.pageflow.service;
 
-import br.edu.infnet.pageflow.model.Post;
+import br.edu.infnet.pageflow.entities.Post;
 import br.edu.infnet.pageflow.repository.PostRepository;
-import br.edu.infnet.pageflow.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -12,11 +9,14 @@ import java.util.Collection;
 @Service
 public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
 
     public Collection<Post> getPosts() {
-        return postRepository.getAllPosts(Sort.by(Sort.Direction.ASC, "title"));
+        return postRepository.getAllPosts();
     }
 
     public Post createPost(Post post) {
