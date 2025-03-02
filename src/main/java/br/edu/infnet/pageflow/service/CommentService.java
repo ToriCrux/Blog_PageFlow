@@ -1,9 +1,8 @@
 package br.edu.infnet.pageflow.service;
 
-import br.edu.infnet.pageflow.model.Comment;
+import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -15,7 +14,10 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     public Collection<Comment> getComments(){
-        return commentRepository.getAllComments(Sort.by(Sort.Direction.ASC, "id"));
+        System.out.println("** comments repository **");
+        System.out.println("comments repository: " + commentRepository.getAllComments());
+        return (Collection<Comment>) commentRepository.findAll();
+//        return commentRepository.getAllComments();
     }
 
     public Comment createComment(Comment comment){

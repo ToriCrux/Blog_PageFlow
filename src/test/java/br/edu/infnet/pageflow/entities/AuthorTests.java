@@ -1,4 +1,4 @@
-package br.edu.infnet.pageflow.model;
+package br.edu.infnet.pageflow.entities;
 
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
@@ -14,12 +14,12 @@ public class AuthorTests {
                                @ForAll String password,
                                @ForAll String bio) {
         Author author = new Author();
-        author.setFirstName(name);
+        author.setName(name);
         author.setUsername(username);
         author.setEmail(email);
         author.setPassword(password);
         author.setBio(bio);
 
-        assertThat(author.getFirstName()).isEqualTo(name);
+        assertThat(author.getName()).isEqualTo(name);
     }
 }
