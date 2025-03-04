@@ -2,6 +2,8 @@ package br.edu.infnet.pageflow.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 @Entity
 @Table(name = "tags")
@@ -14,6 +16,10 @@ public class Tag {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @ManyToMany(mappedBy = "tags")
+    private Set<Post> posts = new HashSet<>();
+
+    // Getters e Setters
     public String getName() {
         return name;
     }
