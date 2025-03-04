@@ -12,7 +12,7 @@ public class Category {
 
     @Column(nullable = false, unique = true)
     private String name;
-//
+
 //    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 //    private List<Post> posts;
 
@@ -24,6 +24,8 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Integer getId() {return id;}
 
 }
 
