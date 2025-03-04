@@ -1,12 +1,10 @@
 package br.edu.infnet.pageflow.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.UUID;
-
+@Entity
+@Table(name = "tags")
 public class Tag {
 
     @Id
@@ -23,6 +21,8 @@ public class Tag {
     public void setName(String name) {
         this.name = name;
     }
+
+    public UUID getId() {return id;}
 
 
 }
