@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -24,5 +25,15 @@ public class PostController {
     @PostMapping("/new")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(post));
+    }
+
+    @PutMapping("/{postId}/tags/{tagId}")
+    public ResponseEntity<Post> addTag(@PathVariable Integer postId, @PathVariable UUID tagId) {
+        return ResponseEntity.ok(postService.addTagToPost(postId, tagId));
+    }
+
+    @DeleteMapping("/{postId}/tags/{tagId}")
+    public ResponseEntity<Post> removeTag(@PathVariable Integer postId, @PathVariable UUID tagId) {
+        return ResponseEntity.ok(postService.removeTagFromPost(postId, tagId));
     }
 }

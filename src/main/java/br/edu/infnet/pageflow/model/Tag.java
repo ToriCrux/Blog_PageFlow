@@ -28,7 +28,7 @@ public class Tag {
         this.name = name;
     }
 
-    public UUID getId() {return id;}
+//    public UUID getId() {return id;}
 
 
 }

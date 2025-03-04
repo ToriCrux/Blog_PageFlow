@@ -19,7 +19,7 @@ public class Post {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
-
+//
 //    @ManyToOne
 //    @JoinColumn(name = "author_id")
 //    private Author author;
@@ -63,5 +63,8 @@ public class Post {
         this.content = content;
     }
 
+    public Set<Tag> getTags() {return tags;}
+
+//    public Integer getId() {return id;}
 }
 
