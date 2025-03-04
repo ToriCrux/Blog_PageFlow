@@ -16,11 +16,6 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public Collection<Category> getCategories() {
-        var categories = categoryRepository.getAllCategories(Sort.by(Sort.Direction.ASC, "name"));
-
-        for (Category category : categories) {
-            System.out.println("Category ID: " + category.getId());
-        }
         return categoryRepository.getAllCategories(Sort.by(Sort.Direction.ASC, "name"));
     }
 

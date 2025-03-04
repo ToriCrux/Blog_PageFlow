@@ -2,6 +2,8 @@ package br.edu.infnet.pageflow.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -13,8 +15,8 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-//    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-//    private List<Post> posts;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Post> posts;
 
     // Getters e Setters
     public String getName() {
@@ -24,8 +26,6 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Integer getId() {return id;}
 
 }
 

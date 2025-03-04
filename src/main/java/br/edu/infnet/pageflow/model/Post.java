@@ -22,9 +22,9 @@ public class Post {
 //    @JoinColumn(name = "author_id")
 //    private Author author;
 //
-//    @ManyToOne
-//    @JoinColumn(name = "category_id")
-//    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 //
 //    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Comment> comments;
