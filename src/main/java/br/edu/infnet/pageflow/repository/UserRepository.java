@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<BlogUser, Integer> {
 
-    // exemplos de queries que podem ser criadas além das
-    // queries default da classe CrudRepository
     Optional<BlogUser> findByEmail(String email);
 
     boolean existsByEmail(String email);

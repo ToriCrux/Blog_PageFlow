@@ -36,12 +36,12 @@ public class WebSecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(requests -> requests
-                    .requestMatchers("/auth/signup", "/auth/login", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll() // Permitir sem autenticação
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll() // Permitir swagger
+                    .requestMatchers("/auth/**", "/auth/resetPassword/**", "/auth/changePassword/**").permitAll() // Permitir sem autenticação
                     .requestMatchers("/api/v1/comments/**", "/api/v1/posts/**", "/api/v1/categories/**").hasAnyRole("ADMINISTRATOR", "AUTHOR", "VISITOR")
                     .requestMatchers("/api/**").hasAnyRole("ADMINISTRATOR", "AUTHOR")
                     .anyRequest().authenticated() // Requer autenticação
             );
-
 
         return http.build();
     }

@@ -34,6 +34,8 @@ public class AuthUserDetailsService implements UserDetailsService {
         return new User(user.getEmail(), user.getPassword(), authorities);
     }
 
+
+
     private BlogUserRoles getUserRole(BlogUser user) {
         return switch (String.valueOf(user.getRole())) {
             case "ADMINISTRATOR" -> BlogUserRoles.ADMINISTRATOR;

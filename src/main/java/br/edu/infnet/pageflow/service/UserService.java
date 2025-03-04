@@ -1,13 +1,12 @@
 package br.edu.infnet.pageflow.service;
 
 import br.edu.infnet.pageflow.dto.SignupRequest;
-import br.edu.infnet.pageflow.entities.Author;
-import br.edu.infnet.pageflow.entities.BlogAdministrator;
-import br.edu.infnet.pageflow.entities.BlogUser;
-import br.edu.infnet.pageflow.entities.Visitor;
+import br.edu.infnet.pageflow.entities.*;
+import br.edu.infnet.pageflow.repository.PasswordTokenRepository;
 import br.edu.infnet.pageflow.repository.UserRepository;
 import br.edu.infnet.pageflow.utils.BlogUserRoles;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +17,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final PasswordTokenRepository passwordTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordTokenRepository passwordTokenRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordTokenRepository = passwordTokenRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -32,6 +32,11 @@ public class UserService {
 
     public Optional<BlogUser> getUserById(Integer id) {
         return userRepository.findById(id);
+    }
+
+    public BlogUser getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this email: " + email));
     }
 
     public BlogUser createUser(SignupRequest signupRequest) {
@@ -65,4 +70,17 @@ public class UserService {
         };
     }
 
+    public void createPasswordResetTokenForUser(BlogUser user, String token) {
+        PasswordResetToken passwordResetToken = new PasswordResetToken(token, user);
+        passwordTokenRepository.save(passwordResetToken);
+    }
+
+    public BlogUser getUserByPasswordResetToken(String token) {
+        return passwordTokenRepository.findByToken(token).getBlogUser();
+    }
+
+    public void changeUserPassword(BlogUser user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }
