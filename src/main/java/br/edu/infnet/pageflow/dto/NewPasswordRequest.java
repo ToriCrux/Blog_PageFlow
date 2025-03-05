@@ -8,6 +8,12 @@ public class NewPasswordRequest {
 
     private String newPassword;
 
+    public NewPasswordRequest(String oldPassword, String token, String newPassword) {
+        this.oldPassword = oldPassword;
+        this.token = token;
+        this.newPassword = newPassword;
+    }
+
     public String getOldPassword() {
         return oldPassword;
     }

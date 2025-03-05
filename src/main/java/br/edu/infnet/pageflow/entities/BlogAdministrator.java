@@ -17,7 +17,7 @@ public class BlogAdministrator extends BlogUser {
         return adminRole;
     }
 
-    public void setRole(AdministratorRoles adminRole) {
+    public void setAdminRole(AdministratorRoles adminRole) {
         this.adminRole = adminRole;
     }
 }

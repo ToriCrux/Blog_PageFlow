@@ -13,7 +13,7 @@ public class PasswordResetToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private int id;
 
     private String token;
 
@@ -43,6 +43,14 @@ public class PasswordResetToken {
         this.blogUser = blogUser;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
         this.createdAt = LocalDateTime.now();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getToken() {

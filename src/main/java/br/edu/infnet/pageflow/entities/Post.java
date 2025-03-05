@@ -36,6 +36,16 @@ public class Post {
     private LocalDateTime updatedAt;
 
     // Getters e Setters
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -51,6 +61,5 @@ public class Post {
     public void setContent(String content) {
         this.content = content;
     }
-
 }
 

@@ -17,6 +17,16 @@ public class Category {
 //    private List<Post> posts;
 
     // Getters e Setters
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -24,6 +34,5 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
-
 }
 

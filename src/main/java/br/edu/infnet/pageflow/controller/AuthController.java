@@ -82,7 +82,6 @@ public class AuthController {
     public ResponseEntity<?> resetPassword(HttpServletRequest request, @RequestBody ResetPasswordRequest resetPasswordRequest) {
 
         BlogUser user = userService.getUserByEmail(resetPasswordRequest.getEmail());
-        System.out.println(user);
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

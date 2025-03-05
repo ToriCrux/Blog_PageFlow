@@ -1,14 +1,31 @@
 package br.edu.infnet.pageflow.dto;
 
 import br.edu.infnet.pageflow.utils.BlogUserRoles;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public class SignupRequest {
 
-    private String name;
+   private String name;
+
     private String username;
+
     private String email;
+
     private String password;
+
     private BlogUserRoles role;
+
+    public SignupRequest() {
+    }
+
+    public SignupRequest(String name, String username, String email, String password, BlogUserRoles role) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     public String getName() {
         return name;
