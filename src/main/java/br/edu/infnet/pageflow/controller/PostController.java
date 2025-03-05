@@ -36,4 +36,10 @@ public class PostController {
     public ResponseEntity<Post> removeTag(@PathVariable Integer postId, @PathVariable UUID tagId) {
         return ResponseEntity.ok(postService.removeTagFromPost(postId, tagId));
     }
+
+    @GetMapping("/buscar/{name}")
+    public ResponseEntity<Collection<Post>> getPostsByCategoryOrTagName(@PathVariable String name) {
+        Collection<Post> posts = postService.findByCategoryOrTagName(name);
+        return ResponseEntity.ok(posts);
+    }
 }

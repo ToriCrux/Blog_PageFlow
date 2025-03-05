@@ -49,4 +49,8 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public Collection<Post> findByCategoryOrTagName(String name) {
+        return postRepository.findByCategoryOrTagName(name);
+    }
+
 }

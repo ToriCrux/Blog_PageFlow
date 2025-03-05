@@ -65,6 +65,9 @@ public class Post {
 
     public Set<Tag> getTags() {return tags;}
 
+    public Category getCategory() {
+        return category;
+    }
 //    public Integer getId() {return id;}
 }
 
