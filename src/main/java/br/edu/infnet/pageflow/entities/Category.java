@@ -1,4 +1,4 @@
-package br.edu.infnet.pageflow.model;
+package br.edu.infnet.pageflow.entities;
 
 import jakarta.persistence.*;
 
@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false, unique = true)
@@ -17,6 +17,16 @@ public class Category {
 //    private List<Post> posts;
 
     // Getters e Setters
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -24,6 +34,5 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
-
 }
 

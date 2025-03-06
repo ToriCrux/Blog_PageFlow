@@ -1,6 +1,6 @@
 package br.edu.infnet.pageflow.repository;
 
-import br.edu.infnet.pageflow.model.Category;
+import br.edu.infnet.pageflow.entities.Category;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

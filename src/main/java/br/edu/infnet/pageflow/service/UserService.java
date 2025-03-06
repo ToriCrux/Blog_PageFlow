@@ -1,11 +1,13 @@
 package br.edu.infnet.pageflow.service;
 
-import br.edu.infnet.pageflow.model.Author;
-import br.edu.infnet.pageflow.model.BlogAdministrator;
-import br.edu.infnet.pageflow.model.User;
-import br.edu.infnet.pageflow.model.Visitor;
+import br.edu.infnet.pageflow.dto.SignupRequest;
+import br.edu.infnet.pageflow.entities.*;
+import br.edu.infnet.pageflow.repository.PasswordTokenRepository;
 import br.edu.infnet.pageflow.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.edu.infnet.pageflow.utils.BlogUserRoles;
+import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -14,30 +16,44 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordTokenRepository passwordTokenRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public Collection<User> getUsers() {
+    public UserService(UserRepository userRepository, PasswordTokenRepository passwordTokenRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordTokenRepository = passwordTokenRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public Collection<BlogUser> getUsers() {
         return userRepository.getAllUsers();
     }
 
-    public Optional<User> getUserById(Integer id) {
+    public Optional<BlogUser> getUserById(Integer id) {
         return userRepository.findById(id);
     }
 
-    // TODO fix code smell - repeated code - start//
-    public User createBlogAdministrator(BlogAdministrator admin) {
-        return userRepository.save(admin);
+    public BlogUser getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this email: " + email));
     }
 
-    public User createAuthor(Author author) {
-        return userRepository.save(author);
-    }
+    public BlogUser createUser(SignupRequest signupRequest) {
 
-    public User createVisitor(Visitor visitor) {
-        return userRepository.save(visitor);
+        if(userRepository.existsByEmail(signupRequest.getEmail())) {
+            return null;
+        }
+
+        BlogUser newBlogUser = instantiateUserByRole(signupRequest.getRole());
+        BeanUtils.copyProperties(signupRequest, newBlogUser);
+
+        String encodedPassword = passwordEncoder.encode(newBlogUser.getPassword());
+        newBlogUser.setPassword(encodedPassword);
+
+        userRepository.save(newBlogUser);
+        return newBlogUser;
     }
-    // TODO fix code smell - repeated code - end//
 
     public void deleteUser(Integer id) {
         if (!userRepository.existsById(id)) {
@@ -46,4 +62,25 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    private BlogUser instantiateUserByRole(BlogUserRoles role) {
+        return switch (role) {
+            case BlogUserRoles.ADMINISTRATOR -> new BlogAdministrator();
+            case BlogUserRoles.VISITOR -> new Visitor();
+            case BlogUserRoles.AUTHOR -> new Author();
+        };
+    }
+
+    public void createPasswordResetTokenForUser(BlogUser user, String token) {
+        PasswordResetToken passwordResetToken = new PasswordResetToken(token, user);
+        passwordTokenRepository.save(passwordResetToken);
+    }
+
+    public BlogUser getUserByPasswordResetToken(String token) {
+        return passwordTokenRepository.findByToken(token).getBlogUser();
+    }
+
+    public void changeUserPassword(BlogUser user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }

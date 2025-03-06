@@ -1,6 +1,6 @@
 package br.edu.infnet.pageflow.controller;
 
-import br.edu.infnet.pageflow.model.Category;
+import br.edu.infnet.pageflow.entities.Category;
 import br.edu.infnet.pageflow.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<Collection<Category>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getCategories());
     }
