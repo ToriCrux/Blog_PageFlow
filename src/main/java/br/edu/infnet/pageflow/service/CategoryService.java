@@ -1,6 +1,6 @@
 package br.edu.infnet.pageflow.service;
 
-import br.edu.infnet.pageflow.model.Category;
+import br.edu.infnet.pageflow.entities.Category;
 import br.edu.infnet.pageflow.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
