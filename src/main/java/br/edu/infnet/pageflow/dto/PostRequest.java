@@ -4,6 +4,7 @@ public class PostRequest {
     private String title;
     private String content;
     private Integer authorId;
+    private Integer categoryId;
 
     public String getTitle() {
         return title;
@@ -21,12 +22,19 @@ public class PostRequest {
         this.content = content;
     }
 
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
-    }
-
     public Integer getAuthorId() {
         return authorId;
     }
 
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
 }

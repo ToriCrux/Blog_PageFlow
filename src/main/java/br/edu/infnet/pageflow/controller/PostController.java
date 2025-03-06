@@ -24,12 +24,13 @@ public class PostController {
 
     @PostMapping("/new")
     public ResponseEntity<Post> createPost(@RequestBody PostRequest postRequest) {
+
         if (postRequest.getAuthorId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         Post post = new Post(postRequest.getTitle(), postRequest.getContent(), null);
-        Post createdPost = postService.createPost(post, postRequest.getAuthorId());
+        Post createdPost = postService.createPost(postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
     }
