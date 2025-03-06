@@ -1,10 +1,8 @@
 package br.edu.infnet.pageflow.entities;
 
-import br.edu.infnet.pageflow.providers.PageFlowTestsProviders;
 import br.edu.infnet.pageflow.utils.AdministratorRoles;
 import br.edu.infnet.pageflow.utils.BlogUserRoles;
 import net.jqwik.api.*;
-import net.jqwik.api.lifecycle.AddLifecycleHook;
 
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
@@ -13,7 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@AddLifecycleHook(PageFlowTestsProviders.class)
+
 public class BlogUserTests {
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,7}$";
