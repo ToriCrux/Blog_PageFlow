@@ -18,4 +18,7 @@ public interface UserRepository extends CrudRepository<BlogUser, Integer> {
     @Query("SELECT u FROM BlogUser u")
     Collection<BlogUser> getAllUsers();
 
+    @Query("SELECT u FROM BlogUser u where u.role = 'AUTHOR' AND u.id = :id")
+    BlogUser findAuthorById(Integer id);
+
 }

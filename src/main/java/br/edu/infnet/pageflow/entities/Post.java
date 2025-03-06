@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(nullable = false)
@@ -18,9 +18,15 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-//    @ManyToOne
-//    @JoinColumn(name = "author_id")
-//    private Author author;
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column
+    private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author author;
 //
 //    @ManyToOne
 //    @JoinColumn(name = "category_id")
@@ -29,15 +35,18 @@ public class Post {
 //    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Comment> comments;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    // Construtores
+    public Post() {
+    }
 
-    @Column
-    private LocalDateTime updatedAt;
+    public Post(String title, String content, Author author) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.createdAt = LocalDateTime.now();
+    }
 
     // Getters e Setters
-
-
     public Integer getId() {
         return id;
     }
@@ -60,6 +69,26 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
 
