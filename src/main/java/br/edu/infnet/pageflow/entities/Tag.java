@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
+
 @Entity
 @Table(name = "tags")
 public class Tag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -20,6 +20,15 @@ public class Tag {
     private Set<Post> posts = new HashSet<>();
 
     // Getters e Setters
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -28,7 +37,11 @@ public class Tag {
         this.name = name;
     }
 
-//    public UUID getId() {return id;}
+    public Set<Post> getPosts() {
+        return posts;
+    }
 
-
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
 }

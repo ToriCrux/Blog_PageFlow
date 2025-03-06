@@ -48,12 +48,12 @@ public class PostController {
     }
 
     @PutMapping("/{postId}/tags/{tagId}")
-    public ResponseEntity<Post> addTag(@PathVariable Integer postId, @PathVariable UUID tagId) {
+    public ResponseEntity<Post> addTag(@PathVariable Integer postId, @PathVariable Integer tagId) {
         return ResponseEntity.ok(postService.addTagToPost(postId, tagId));
     }
 
     @DeleteMapping("/{postId}/tags/{tagId}")
-    public ResponseEntity<Post> removeTag(@PathVariable Integer postId, @PathVariable UUID tagId) {
+    public ResponseEntity<Post> removeTag(@PathVariable Integer postId, @PathVariable Integer tagId) {
         return ResponseEntity.ok(postService.removeTagFromPost(postId, tagId));
     }
 }

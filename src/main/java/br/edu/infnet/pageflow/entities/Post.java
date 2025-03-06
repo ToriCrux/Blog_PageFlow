@@ -3,6 +3,8 @@ package br.edu.infnet.pageflow.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -31,6 +33,14 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToMany
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 //
 //    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Comment> comments;
@@ -47,7 +57,6 @@ public class Post {
     }
 
     // Getters e Setters
-
     public Integer getId() {
         return id;
     }
@@ -102,6 +111,14 @@ public class Post {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 }
 
