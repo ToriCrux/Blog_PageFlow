@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/v1/api/posts")
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
     @Autowired
