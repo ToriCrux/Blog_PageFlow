@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -30,7 +29,7 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        Post post = new Post(postRequest.getTitle(), postRequest.getContent(), null);
+//        Post post = new Post(postRequest.getTitle(), postRequest.getContent(), null);
         Post createdPost = postService.createPost(postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
@@ -47,13 +46,14 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{postId}/tags/{tagId}")
+    @PostMapping("/{postId}/tags/{tagId}")
     public ResponseEntity<Post> addTag(@PathVariable Integer postId, @PathVariable Integer tagId) {
         return ResponseEntity.ok(postService.addTagToPost(postId, tagId));
     }
 
     @DeleteMapping("/{postId}/tags/{tagId}")
-    public ResponseEntity<Post> removeTag(@PathVariable Integer postId, @PathVariable Integer tagId) {
-        return ResponseEntity.ok(postService.removeTagFromPost(postId, tagId));
+    public ResponseEntity<Void> removeTag(@PathVariable Integer postId, @PathVariable Integer tagId) {
+        postService.removeTagFromPost(postId, tagId);
+        return ResponseEntity.noContent().build();
     }
 }

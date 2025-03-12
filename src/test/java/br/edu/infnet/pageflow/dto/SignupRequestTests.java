@@ -4,6 +4,7 @@ import br.edu.infnet.pageflow.utils.BlogUserRoles;
 import net.jqwik.api.*;
 import net.jqwik.api.constraints.*;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,8 +75,8 @@ public class SignupRequestTests {
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setName(name);
 
-        assertNotNull(signupRequest.getUsername());
-        assertFalse(signupRequest.getUsername().isEmpty(), "Username cannot be empty");
+        assertNotNull(signupRequest.getName());
+        assertFalse(signupRequest.getName().isEmpty(), "Username cannot be empty");
     }
 
     @Property

@@ -2,10 +2,7 @@ package br.edu.infnet.pageflow.service;
 
 import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.entities.*;
-import br.edu.infnet.pageflow.repository.CategoryRepository;
-import br.edu.infnet.pageflow.repository.PostRepository;
-import br.edu.infnet.pageflow.repository.TagRepository;
-import br.edu.infnet.pageflow.repository.UserRepository;
+import br.edu.infnet.pageflow.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,12 +19,14 @@ public class PostService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
+    private final PostTagRelationRepository postTagRelationRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, CategoryRepository categoryRepository, TagRepository tagRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, CategoryRepository categoryRepository, TagRepository tagRepository, PostTagRelationRepository postTagRelationRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.tagRepository = tagRepository;
+        this.postTagRelationRepository = postTagRelationRepository;
     }
 
     public Post createPost(PostRequest postRequest) {
@@ -67,22 +66,30 @@ public class PostService {
     }
 
     public Post addTagToPost(Integer postId, Integer tagId) {
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post não encontrado"));
+
         Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(() -> new RuntimeException("Tag não encontrada"));
 
-        post.getTags().add(tag);
-        return postRepository.save(post);
+        PostTagRelation postTagRelation = new PostTagRelation();
+        postTagRelation.setPost(post);
+        postTagRelation.setTag(tag);
+
+
+        return postTagRelationRepository.save(postTagRelation).getPost();
     }
 
-    public Post removeTagFromPost(Integer postId, Integer tagId) {
+    public void removeTagFromPost(Integer postId, Integer tagId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(() -> new RuntimeException("Tag not found"));
 
-        post.getTags().remove(tag);
-        return postRepository.save(post);
+        PostTagRelation postTagRelation = postTagRelationRepository.findByPostAndTag(post, tag)
+                .orElseThrow(() -> new RuntimeException("Relation not found"));
+
+        postTagRelationRepository.delete(postTagRelation);
     }
 }

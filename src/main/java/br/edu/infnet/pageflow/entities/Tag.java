@@ -16,9 +16,6 @@ public class Tag {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
-    private Set<Post> posts = new HashSet<>();
-
     // Getters e Setters
 
     public int getId() {
@@ -37,11 +34,4 @@ public class Tag {
         this.name = name;
     }
 
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
 }
