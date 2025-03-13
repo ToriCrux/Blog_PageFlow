@@ -51,8 +51,8 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(newBlogUser.getPassword());
         newBlogUser.setPassword(encodedPassword);
 
-        userRepository.save(newBlogUser);
-        return newBlogUser;
+        return userRepository.save(newBlogUser);
+//        return newBlogUser;
     }
 
     public void deleteUser(Integer id) {
