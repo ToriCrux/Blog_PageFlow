@@ -1,31 +1,44 @@
 package br.edu.infnet.pageflow.service;
 
-import br.edu.infnet.pageflow.model.Author;
-import br.edu.infnet.pageflow.model.Post;
-import br.edu.infnet.pageflow.repository.AuthorRepository;
-import br.edu.infnet.pageflow.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.edu.infnet.pageflow.dto.PostRequest;
+import br.edu.infnet.pageflow.entities.*;
+import br.edu.infnet.pageflow.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final TagRepository tagRepository;
+    private final PostTagRelationRepository postTagRelationRepository;
 
-    @Autowired
-    private AuthorRepository authorRepository; // Agora usamos um repositório específico para Author
+    public PostService(PostRepository postRepository, UserRepository userRepository, CategoryRepository categoryRepository, TagRepository tagRepository, PostTagRelationRepository postTagRelationRepository) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+        this.tagRepository = tagRepository;
+        this.postTagRelationRepository = postTagRelationRepository;
+    }
 
-    public Post createPost(Post post, Integer authorId) {
-        Author author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found"));
+    public Post createPost(PostRequest postRequest) {
 
-        post.setAuthor(author);
+        BlogUser author = userRepository.findAuthorById(postRequest.getAuthorId());
+        Post post = new Post();
+        post.setTitle(postRequest.getTitle());
+        post.setContent(postRequest.getContent());
+        post.setAuthor((Author) author);
+
+        Optional<Category> category = categoryRepository.findById(postRequest.getCategoryId());
+        category.ifPresent(post::setCategory);
+
         return postRepository.save(post);
     }
 
@@ -49,5 +62,54 @@ public class PostService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
         }
         postRepository.deleteById(id);
+    }
+
+    public Post addTagToPost(Integer postId, Integer tagId) {
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post não encontrado"));
+
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new RuntimeException("Tag não encontrada"));
+
+        PostTagRelation postTagRelation = new PostTagRelation();
+        postTagRelation.setPost(post);
+        postTagRelation.setTag(tag);
+
+
+        return postTagRelationRepository.save(postTagRelation).getPost();
+    }
+
+    public void removeTagFromPost(Integer postId, Integer tagId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new RuntimeException("Tag not found"));
+
+        PostTagRelation postTagRelation = postTagRelationRepository.findByPostAndTag(post, tag)
+                .orElseThrow(() -> new RuntimeException("Relation not found"));
+
+        postTagRelationRepository.delete(postTagRelation);
+    }
+
+    public Collection<Post> findByCategoryName(String categoryName) {
+        Category category = categoryRepository.findByName(categoryName);
+
+        if (category == null) {
+            return null;
+        }
+
+        Collection<Post> searchedPosts = postRepository.findByCategoryId(category.getId());
+        return searchedPosts;
+
+    }
+
+    public Collection<Post> findByTagName(String tagName) {
+        Tag tag = tagRepository.findByName(tagName);
+        if (tag == null) {
+            return null;
+        }
+        Collection<Post> searchedPosts = postTagRelationRepository.findByTagId(tag.getId());
+        return searchedPosts;
     }
 }

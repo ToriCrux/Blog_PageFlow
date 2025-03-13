@@ -1,6 +1,6 @@
 package br.edu.infnet.pageflow.controller;
 
-import br.edu.infnet.pageflow.model.Comment;
+import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.service.CommentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,10 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<Collection<Comment>> getAllComments() {
         Collection<Comment> comments = commentService.getComments();
+        System.out.println("comments: " + comments);
         return ResponseEntity.ok(comments);
     }
 

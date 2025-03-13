@@ -1,9 +1,10 @@
-package br.edu.infnet.pageflow.model;
+package br.edu.infnet.pageflow.dto;
 
 public class PostRequest {
     private String title;
     private String content;
     private Integer authorId;
+    private Integer categoryId;
 
     public String getTitle() {
         return title;
@@ -25,4 +26,15 @@ public class PostRequest {
         return authorId;
     }
 
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
 }
