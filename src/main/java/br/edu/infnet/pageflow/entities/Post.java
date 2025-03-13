@@ -3,8 +3,6 @@ package br.edu.infnet.pageflow.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "posts")

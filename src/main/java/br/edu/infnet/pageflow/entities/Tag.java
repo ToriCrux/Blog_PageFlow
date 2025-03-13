@@ -2,9 +2,6 @@ package br.edu.infnet.pageflow.entities;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "tags")
 public class Tag {

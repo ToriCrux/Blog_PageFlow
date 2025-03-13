@@ -4,7 +4,6 @@ import br.edu.infnet.pageflow.utils.BlogUserRoles;
 import net.jqwik.api.*;
 import net.jqwik.api.constraints.*;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
