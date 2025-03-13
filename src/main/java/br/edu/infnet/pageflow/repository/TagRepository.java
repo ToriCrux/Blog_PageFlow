@@ -17,5 +17,5 @@ public interface TagRepository extends CrudRepository<Tag, Integer> {
     Collection<Tag> getAllTags(Sort sort);
 
     @Query("SELECT t FROM Tag t WHERE t.name = :name")
-    Optional<Tag> findByName(@Param("name") String name);
+    Tag findByName(@Param("name") String name);
 }

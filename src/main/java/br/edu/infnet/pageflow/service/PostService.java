@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -91,5 +92,26 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("Relation not found"));
 
         postTagRelationRepository.delete(postTagRelation);
+    }
+
+    public Collection<Post> findByCategoryName(String categoryName) {
+        Category category = categoryRepository.findByName(categoryName);
+
+        if (category == null) {
+            return null;
+        }
+
+        Collection<Post> searchedPosts = postRepository.findByCategoryId(category.getId());
+        return searchedPosts;
+
+    }
+
+    public Collection<Post> findByTagName(String tagName) {
+        Tag tag = tagRepository.findByName(tagName);
+        if (tag == null) {
+            return null;
+        }
+        Collection<Post> searchedPosts = postTagRelationRepository.findByTagId(tag.getId());
+        return searchedPosts;
     }
 }

@@ -14,4 +14,6 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
     // queries default da classe CrudRepository
     @Query("SELECT p FROM Post p")
     Collection<Post> getAllPosts();
+
+    Collection<Post> findByCategoryId(Integer id);
 }

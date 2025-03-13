@@ -15,4 +15,6 @@ public interface CategoryRepository extends CrudRepository<Category, Integer> {
     // queries default da classe CrudRepository
     @Query("from Category")
     Collection<Category> getAllCategories(Sort sort);
+
+    Category findByName(String name);
 }

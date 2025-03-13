@@ -56,4 +56,16 @@ public class PostController {
         postService.removeTagFromPost(postId, tagId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search/{categoryName}")
+    public ResponseEntity<Collection<Post>> getPostsByCategory(@PathVariable String categoryName) {
+        Collection<Post> posts = postService.findByCategoryName(categoryName);
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/tagSearch/{tagName}")
+    public ResponseEntity<Collection<Post>> getPostsByTag(@PathVariable String tagName) {
+        Collection<Post> posts = postService.findByTagName(tagName);
+        return ResponseEntity.ok(posts);
+    }
 }
