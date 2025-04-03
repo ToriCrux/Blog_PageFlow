@@ -21,11 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
-    private final JwtAuthenticationSuccessHandler successHandler;
-
-    public WebSecurityConfig(JwtRequestFilter jwtRequestFilter, JwtAuthenticationSuccessHandler successHandler) {
+    public WebSecurityConfig(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
-        this.successHandler = successHandler;
     }
 
     @Bean
@@ -43,8 +40,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/api/v1/comments/**", "/api/v1/posts/**", "/api/v1/categories/**").hasAnyRole("ADMINISTRATOR", "AUTHOR", "VISITOR")
                     .requestMatchers("/api/**", "/api/v1/tags/**").hasAnyRole("ADMINISTRATOR", "AUTHOR")
                     .anyRequest().authenticated() // Requer autenticação
-            )
-                .formLogin(login -> login.successHandler(successHandler));
+            );
 
         return http.build();
     }
