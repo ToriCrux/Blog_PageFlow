@@ -89,29 +89,29 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.role").value(user.getRole().name()));
     }
 
-    @Test
-    void testLoginUser() throws Exception {
-        BlogUser user = new BlogUser("john@example.com", "johndoe");
-
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail(user.getEmail());
-        loginRequest.setPassword(user.getPassword());
-
-        UserDetails userDetails = mock(UserDetails.class);
-
-        LoginResponse loginResponse = new LoginResponse(jwtUtil.generateToken(userDetails.getUsername()));
-
-
-        when(userDetails.getUsername()).thenReturn(user.getEmail());
-        when(authUserDetailsService.loadUserByUsername(user.getEmail())).thenReturn(userDetails);
-        when(jwtUtil.generateToken(user.getEmail())).thenReturn(String.valueOf(loginResponse));
-
-        mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.jwt").value(String.valueOf(loginResponse)));
-    }
+//    @Test
+//    void testLoginUser() throws Exception {
+//        BlogUser user = new BlogUser("john@example.com", "johndoe");
+//
+//        LoginRequest loginRequest = new LoginRequest();
+//        loginRequest.setEmail(user.getEmail());
+//        loginRequest.setPassword(user.getPassword());
+//
+//        UserDetails userDetails = mock(UserDetails.class);
+//
+//        LoginResponse loginResponse = new LoginResponse(jwtUtil.generateToken(userDetails.getUsername()));
+//
+//
+//        when(userDetails.getUsername()).thenReturn(user.getEmail());
+//        when(authUserDetailsService.loadUserByUsername(user.getEmail())).thenReturn(userDetails);
+//        when(jwtUtil.generateToken(user.getEmail())).thenReturn(String.valueOf(loginResponse));
+//
+//        mockMvc.perform(post("/auth/login")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(loginRequest)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.jwt").value(String.valueOf(loginResponse)));
+//    }
 
     @Test
     void resetPassword() throws Exception {

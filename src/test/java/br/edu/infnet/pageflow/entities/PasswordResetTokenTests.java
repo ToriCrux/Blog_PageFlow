@@ -26,8 +26,8 @@ public class PasswordResetTokenTests {
     }
 
     @Provide
-    public Arbitrary<String> validJwtToken(@ForAll("validUsername") String username) {
-        return Arbitraries.of(jwtUtil.generateToken(username));
+    Arbitrary<String> validJwtToken(@ForAll Integer userId) {
+        return Arbitraries.of(jwtUtil.generateToken(userId));
     }
 
     @Property

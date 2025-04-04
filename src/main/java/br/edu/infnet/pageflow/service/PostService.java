@@ -31,6 +31,7 @@ public class PostService {
     public Post createPost(PostRequest postRequest) {
 
         BlogUser author = userRepository.findAuthorById(postRequest.getAuthorId());
+
         Post post = new Post();
         post.setTitle(postRequest.getTitle());
         post.setContent(postRequest.getContent());

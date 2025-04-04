@@ -2,6 +2,7 @@ package br.edu.infnet.pageflow.controller;
 
 import br.edu.infnet.pageflow.dto.*;
 import br.edu.infnet.pageflow.entities.BlogUser;
+import br.edu.infnet.pageflow.repository.UserRepository;
 import br.edu.infnet.pageflow.security.jwt.CookieUtil;
 import br.edu.infnet.pageflow.security.jwt.JwtUtil;
 import br.edu.infnet.pageflow.service.AuthUserDetailsService;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -39,9 +41,10 @@ public class AuthController {
     private final MessageSource messages;
     private final JavaMailSender mailSender;
     private final JwtTokenService jwtTokenService;
+    private final UserRepository userRepository;
 
     // TODO - Long parameter list, fix it
-    public AuthController(UserService userService, EmailService emailService, AuthenticationManager authenticationManager, AuthUserDetailsService authUserDetailsService, JwtUtil jwtUtil, MessageSource messages, JavaMailSender mailSender, JwtTokenService jwtTokenService) {
+    public AuthController(UserService userService, EmailService emailService, AuthenticationManager authenticationManager, AuthUserDetailsService authUserDetailsService, JwtUtil jwtUtil, MessageSource messages, JavaMailSender mailSender, JwtTokenService jwtTokenService, UserRepository userRepository) {
         this.userService = userService;
         this.emailService = emailService;
         this.authenticationManager = authenticationManager;
@@ -50,6 +53,7 @@ public class AuthController {
         this.messages = messages;
         this.mailSender = mailSender;
         this.jwtTokenService = jwtTokenService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/signup")
@@ -76,12 +80,16 @@ public class AuthController {
         }
 
         final UserDetails userDetails = authUserDetailsService.loadUserByUsername(loginRequest.getEmail());
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
-        CookieUtil.addJwtCookie(jwt, request, response);
+        Optional<BlogUser> user = userRepository.findByEmail(userDetails.getUsername());
 
-        return ResponseEntity.ok("Login successful");
-//        return ResponseEntity.ok(new LoginResponse(jwt));
+//        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        final String jwt = jwtUtil.generateToken(user.get().getId());
+
+//        CookieUtil.addJwtCookie(jwt, request, response);
+//
+//        return ResponseEntity.ok("Login successful");
+        return ResponseEntity.ok(new LoginResponse(jwt));
     }
 
     @PostMapping("/resetPassword")
