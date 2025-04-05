@@ -3,13 +3,11 @@ package br.edu.infnet.pageflow.controller;
 import br.edu.infnet.pageflow.dto.*;
 import br.edu.infnet.pageflow.entities.BlogUser;
 import br.edu.infnet.pageflow.repository.UserRepository;
-import br.edu.infnet.pageflow.security.jwt.CookieUtil;
 import br.edu.infnet.pageflow.security.jwt.JwtUtil;
 import br.edu.infnet.pageflow.service.AuthUserDetailsService;
 import br.edu.infnet.pageflow.service.EmailService;
 import br.edu.infnet.pageflow.service.JwtTokenService;
 import br.edu.infnet.pageflow.service.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -24,7 +22,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -82,9 +79,9 @@ public class AuthController {
         final UserDetails userDetails = authUserDetailsService.loadUserByUsername(loginRequest.getEmail());
 
         Optional<BlogUser> user = userRepository.findByEmail(userDetails.getUsername());
+        System.out.println(user.toString());
 
-//        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        final String jwt = jwtUtil.generateToken(user.get().getId());
+        final String jwt = jwtUtil.generateToken(user);
 
 //        CookieUtil.addJwtCookie(jwt, request, response);
 //

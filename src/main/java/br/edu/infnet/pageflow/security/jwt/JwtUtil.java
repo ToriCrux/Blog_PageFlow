@@ -1,6 +1,7 @@
 package br.edu.infnet.pageflow.security.jwt;
 
 
+import br.edu.infnet.pageflow.entities.BlogUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -14,6 +15,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -51,16 +53,16 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public String generateToken(Integer userId) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userId);
+    public String generateToken(Optional<BlogUser> user) {
+        return createToken(user);
     }
 
-    private String createToken(Map<String, Object> claims, Integer userId) {
+    private String createToken(Optional<BlogUser> user) {
+
         return Jwts
                 .builder()
-                .setClaims(claims)
-                .setSubject(String.valueOf(userId))
+                .setClaims(generateClaims(user))
+                .setSubject(user.get().getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
@@ -69,6 +71,16 @@ public class JwtUtil {
     private SecretKey getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private Map<String, Object> generateClaims(Optional<BlogUser> user) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.get().getId());
+        claims.put("username", user.get().getUsername());
+        claims.put("role", user.get().getRole());
+
+        return claims;
     }
 
 }
