@@ -3,6 +3,7 @@ package br.edu.infnet.pageflow.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -27,16 +28,14 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
-//
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-//
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Comment> comments;
+    @Transient
+    private List<Comment> comments;
 
-    // Construtores
     public Post() {
     }
 
@@ -47,7 +46,6 @@ public class Post {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters e Setters
     public Integer getId() {
         return id;
     }
@@ -104,5 +102,12 @@ public class Post {
         this.category = category;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 }
 

@@ -43,7 +43,8 @@ public class WebSecurityConfig {
             )
             .authorizeHttpRequests(requests -> requests
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll() // Permitir swagger
-                    .requestMatchers("/auth/**", "/auth/resetPassword/**", "/auth/changePassword/**", "/auth/signup","/api/v1/posts").permitAll() // Permitir sem autenticação
+                    .requestMatchers("/auth/**", "/auth/resetPassword/**", "/auth/changePassword/**", "/auth/signup").permitAll() // Permitir sem autenticação
+                    .requestMatchers("/api/v1/posts", "/api/v1/posts/*/comment", "/api/v1/posts/*/*", "/api/v1/comments/**").permitAll() // Permitir sem autenticação
                     .requestMatchers("/api/v1/comments/**", "/api/v1/posts/**", "/api/v1/categories/**").hasAnyRole("ADMINISTRATOR", "AUTHOR", "VISITOR")
                     .requestMatchers("/api/**", "/api/v1/tags/**").hasAnyRole("ADMINISTRATOR", "AUTHOR")
                     .anyRequest().authenticated() // Requer autenticação

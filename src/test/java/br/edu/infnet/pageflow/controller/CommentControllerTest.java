@@ -1,6 +1,7 @@
 package br.edu.infnet.pageflow.controller;
 
 import br.edu.infnet.pageflow.TestSecurityConfig;
+import br.edu.infnet.pageflow.dto.CommentRequest;
 import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.security.jwt.JwtUtil;
 import br.edu.infnet.pageflow.service.AuthUserDetailsService;
@@ -65,16 +66,21 @@ class CommentControllerTest {
 
     @Test
     void testCreateComment() throws Exception {
-        Comment comment = new Comment();
-        comment.setContent("This is a comment");
-        comment.setApproved(true);
 
-        when(commentService.createComment(comment)).thenReturn(comment);
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setContent("This is a comment");
+        commentRequest.setApproved(true);
+
+        Comment comment = new Comment();
+        comment.setContent(commentRequest.getContent());
+        comment.setApproved(commentRequest.isApproved());
+
+        when(commentService.createComment(commentRequest)).thenReturn(comment);
 
         mockMvc.perform(get("/api/v1/comments")
                         .with(jwt())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(comment)))
+                        .content(objectMapper.writeValueAsString(commentRequest)))
                 .andExpect(status().isOk());
     }
 }
