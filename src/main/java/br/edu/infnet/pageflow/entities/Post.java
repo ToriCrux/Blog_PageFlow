@@ -33,6 +33,9 @@ public class Post {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostCommentRelation> postCommentRelations;
+
     @Transient
     private List<Comment> comments;
 

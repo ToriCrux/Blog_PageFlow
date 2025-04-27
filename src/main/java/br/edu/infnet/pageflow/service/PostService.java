@@ -68,7 +68,8 @@ public class PostService {
 
     public Collection<Post> getPosts() {
 
-        Collection<Post> posts = (Collection<Post>) postRepository.findAll();
+//        Collection<Post> posts = (Collection<Post>) postRepository.findAll();
+        Collection<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
 
         for (Post post : posts) {
             List<Comment> comments = getCommentsByPostId(post.getId());

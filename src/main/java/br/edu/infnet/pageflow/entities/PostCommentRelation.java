@@ -1,6 +1,8 @@
 package br.edu.infnet.pageflow.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "posts_comments")
@@ -12,10 +14,12 @@ public class PostCommentRelation {
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
     @ManyToOne
     @JoinColumn(name = "comment_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment comment;
 
     public Integer getId() {
