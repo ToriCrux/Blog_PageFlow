@@ -1,12 +1,9 @@
 package br.edu.infnet.pageflow.service;
 
 import br.edu.infnet.pageflow.dto.CommentRequest;
-import br.edu.infnet.pageflow.entities.Comment;
-import br.edu.infnet.pageflow.entities.Post;
-import br.edu.infnet.pageflow.entities.PostCommentRelation;
-import br.edu.infnet.pageflow.repository.CommentRepository;
-import br.edu.infnet.pageflow.repository.PostCommentRelationRepository;
-import br.edu.infnet.pageflow.repository.PostRepository;
+import br.edu.infnet.pageflow.entities.*;
+import br.edu.infnet.pageflow.entities.ids.CommentLikeRelationId;
+import br.edu.infnet.pageflow.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,11 +17,15 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostCommentRelationRepository postCommentRelationRepository;
     private final PostRepository postRepository;
+    private final CommentLikeRelationRepository commentLikeRelationRepository;
+    private final UserRepository userRepository;
 
-    public CommentService(CommentRepository commentRepository, PostCommentRelationRepository postCommentRelationRepository, PostRepository postRepository) {
+    public CommentService(CommentRepository commentRepository, PostCommentRelationRepository postCommentRelationRepository, PostRepository postRepository, CommentLikeRelationRepository commentLikeRelationRepository, UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.postCommentRelationRepository = postCommentRelationRepository;
         this.postRepository = postRepository;
+        this.commentLikeRelationRepository = commentLikeRelationRepository;
+        this.userRepository = userRepository;
     }
 
     public Collection<Comment> getComments(){
@@ -77,5 +78,27 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
+
+    public Comment addLikeComment(Comment existingComment, BlogUser user) {
+        CommentLikeRelationId likeId = new CommentLikeRelationId(existingComment.getId(), user.getId());
+
+        if(commentLikeRelationRepository.existsById(likeId)) {
+            return existingComment;
+        }
+
+        CommentLikeRelation like = new CommentLikeRelation(existingComment, user);
+
+        return commentLikeRelationRepository.save(like).getComment();
+    }
+
+    public void removeLikeComment(Integer commentId, Integer userId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        BlogUser user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        CommentLikeRelationId like = new CommentLikeRelationId(commentId, userId);
+        commentLikeRelationRepository.deleteById(like);
+    }
 
 }
