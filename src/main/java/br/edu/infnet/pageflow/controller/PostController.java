@@ -3,11 +3,13 @@ package br.edu.infnet.pageflow.controller;
 import br.edu.infnet.pageflow.dto.CommentRequest;
 import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.dto.PostResponse;
+import br.edu.infnet.pageflow.entities.BlogUser;
 import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.entities.Post;
 import br.edu.infnet.pageflow.repository.PostCommentRelationRepository;
 import br.edu.infnet.pageflow.service.CommentService;
 import br.edu.infnet.pageflow.service.PostService;
+import br.edu.infnet.pageflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -26,6 +29,7 @@ public class PostController {
     private CommentService commentService;
     @Autowired
     private PostCommentRelationRepository postCommentRelationRepository;
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<Collection<Post>> getAllPosts() {
@@ -124,4 +128,27 @@ public class PostController {
         Collection<Post> posts = postService.findByTagName(tagName);
         return ResponseEntity.ok(posts);
     }
+
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<Post> addLike(@PathVariable Integer postId, @RequestBody Integer userId) {
+
+        Post existingPost = postService.findById(postId);
+        Optional<BlogUser> existingUser = userService.getUserById(userId);
+
+        if (existingPost == null || existingUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        BlogUser user = existingUser.get();
+
+        return ResponseEntity.ok(postService.addLikePost(existingPost, user));
+    }
+
+    @DeleteMapping("/{postId}/like")
+    public ResponseEntity<Void> removeLike(@PathVariable Integer postId, @RequestBody Integer userId) {
+        postService.removeLikePost(postId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

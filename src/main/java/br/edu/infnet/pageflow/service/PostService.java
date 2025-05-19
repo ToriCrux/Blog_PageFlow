@@ -4,6 +4,7 @@ import br.edu.infnet.pageflow.dto.CommentResponse;
 import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.dto.PostResponse;
 import br.edu.infnet.pageflow.entities.*;
+import br.edu.infnet.pageflow.entities.ids.PostLikeRelationId;
 import br.edu.infnet.pageflow.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,9 @@ public class PostService {
     private final PostTagRelationRepository postTagRelationRepository;
     private final CommentRepository commentRepository;
     private final PostCommentRelationRepository postCommentRelationRepository;
+    private final PostLikeRelationRepository postLikeRelationRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, CategoryRepository categoryRepository, TagRepository tagRepository, PostTagRelationRepository postTagRelationRepository, CommentRepository commentRepository, PostCommentRelationRepository postCommentRelationRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, CategoryRepository categoryRepository, TagRepository tagRepository, PostTagRelationRepository postTagRelationRepository, CommentRepository commentRepository, PostCommentRelationRepository postCommentRelationRepository, PostLikeRelationRepository postLikeRelationRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
@@ -34,6 +36,7 @@ public class PostService {
         this.postTagRelationRepository = postTagRelationRepository;
         this.commentRepository = commentRepository;
         this.postCommentRelationRepository = postCommentRelationRepository;
+        this.postLikeRelationRepository = postLikeRelationRepository;
     }
 
     public Post createPost(PostRequest postRequest) {
@@ -220,5 +223,26 @@ public class PostService {
 
     public void savePost(Post existingPost) {
         postRepository.save(existingPost);
+    }
+
+    public Post addLikePost(Post existingPost, BlogUser user) {
+        PostLikeRelationId likeId = new PostLikeRelationId(existingPost.getId(), user.getId());
+        if(postLikeRelationRepository.existsById(likeId)) {
+            return existingPost;
+        }
+
+        PostLikeRelation like = new PostLikeRelation(existingPost, user);
+
+        return postLikeRelationRepository.save(like).getPost();
+    }
+
+    public void removeLikePost(Integer postId, Integer userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        BlogUser user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        PostLikeRelationId like = new PostLikeRelationId(postId, userId);
+        postLikeRelationRepository.deleteById(like);
     }
 }
