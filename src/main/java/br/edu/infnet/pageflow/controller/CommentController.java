@@ -2,8 +2,10 @@ package br.edu.infnet.pageflow.controller;
 
 import br.edu.infnet.pageflow.dto.CategoryRequest;
 import br.edu.infnet.pageflow.dto.CommentRequest;
+import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.entities.Category;
 import br.edu.infnet.pageflow.entities.Comment;
+import br.edu.infnet.pageflow.entities.Post;
 import br.edu.infnet.pageflow.service.CommentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,4 +32,13 @@ public class CommentController {
         System.out.println("comments: " + comments);
         return ResponseEntity.ok(comments);
     }
+
+    @GetMapping("/search/{parentCommentId}")
+    public ResponseEntity<Collection<Comment>> getCommentsByParentComment(@PathVariable Integer parentCommentId) {
+        Collection<Comment> comments = commentService.getCommentsByParentComment(parentCommentId);
+        return ResponseEntity.ok(comments);
+    }
+
+
+
 }

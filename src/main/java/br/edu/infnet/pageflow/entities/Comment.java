@@ -1,8 +1,11 @@
 package br.edu.infnet.pageflow.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +27,19 @@ public class Comment {
 
     @Column
     private LocalDateTime updatedAt;
+
+    @ManyToOne(optional = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "parent_comment_id", referencedColumnName = "id")
+    private Comment parentComment = null;
+
+    @Transient
+    private List<Comment> subcomments;
+
+    @ManyToOne
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    private BlogUser author = null;
 
     public Integer getId() {
         return id;
@@ -64,5 +80,16 @@ public class Comment {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public Comment getParentComment() {return parentComment;}
+
+    public void setParentComment(Comment parentComment) {this.parentComment = parentComment;}
+
+    public BlogUser getAuthor() {return author;}
+
+    public void setAuthor(BlogUser author) {this.author = author;}
+
+    public List<Comment> getSubcomments() {return subcomments;}
+    public void setSubcomments(List<Comment> subcomments) {this.subcomments = subcomments;}
 }
 

@@ -73,6 +73,10 @@ public class PostService {
 
         for (Post post : posts) {
             List<Comment> comments = getCommentsByPostId(post.getId());
+            comments.forEach(comment -> {
+                List<Comment> subcomments = (List<Comment>) commentRepository.getAllByParentComment(comment.getId());
+                comment.setSubcomments(subcomments);
+            });
             post.setComments(comments);
         }
 

@@ -14,4 +14,9 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
     // queries default da classe CrudRepository
     @Query("from Comment")
     Collection<Comment> getAllComments();
+
+
+    Collection<Comment> getAllByParentComment(Integer parentCommentId);
+
+
 }

@@ -1,6 +1,7 @@
 package br.edu.infnet.pageflow.service;
 
 import br.edu.infnet.pageflow.dto.CommentRequest;
+import br.edu.infnet.pageflow.entities.BlogUser;
 import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.entities.Post;
 import br.edu.infnet.pageflow.entities.PostCommentRelation;
@@ -20,11 +21,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostCommentRelationRepository postCommentRelationRepository;
     private final PostRepository postRepository;
+    private final UserService userService;
 
-    public CommentService(CommentRepository commentRepository, PostCommentRelationRepository postCommentRelationRepository, PostRepository postRepository) {
+    public CommentService(CommentRepository commentRepository, PostCommentRelationRepository postCommentRelationRepository, PostRepository postRepository, UserService userService) {
         this.commentRepository = commentRepository;
         this.postCommentRelationRepository = postCommentRelationRepository;
         this.postRepository = postRepository;
+        this.userService = userService;
     }
 
     public Collection<Comment> getComments(){
@@ -43,11 +46,38 @@ public class CommentService {
         return relations.stream().map(PostCommentRelation::getComment).toList();
     }
 
+    public Collection<Comment> getCommentsByParentComment(Integer parentCommentId) {
+
+        Optional<Comment> existingComment = commentRepository.findById(parentCommentId);
+
+        if(!existingComment.isPresent()){
+            throw new RuntimeException("Parent comment not found");
+        }
+
+        return (Collection<Comment>) commentRepository.getAllByParentComment(parentCommentId);
+
+    }
+
     public Comment createComment(CommentRequest commentRequest){
 
         Comment comment = new Comment();
         comment.setContent(commentRequest.getContent());
         comment.setApproved(commentRequest.isApproved());
+        if(commentRequest.getParentCommentId() != null){
+            Optional<Comment> existingParentComment = commentRepository.findById(commentRequest.getParentCommentId());
+            if(!existingParentComment.isPresent()){
+                throw new RuntimeException("Parent comment not found");
+            }
+            comment.setParentComment(existingParentComment.get());
+        }
+
+        if(commentRequest.getAuthorId() != null){
+            Optional<BlogUser> existingAuthor = userService.getUserById(commentRequest.getAuthorId());
+            if(!existingAuthor.isPresent()){
+                throw new RuntimeException("Author not found");
+            }
+            comment.setAuthor(existingAuthor.get());
+        }
 
         return commentRepository.save(comment);
     }
@@ -56,16 +86,33 @@ public class CommentService {
 
         Optional<Comment> existingComment = commentRepository.findById(id);
 
-        if(existingComment.isPresent()){
-            Comment updatedComment = existingComment.get();
-            updatedComment.setContent(commentRequest.getContent());
-            updatedComment.setApproved(commentRequest.isApproved());
-            updatedComment.setUpdatedAt(LocalDateTime.now());
-
-            return commentRepository.save(updatedComment);
+        if(!existingComment.isPresent()) {
+            return null;
         }
 
-        return null;
+        Comment updatedComment = existingComment.get();
+        updatedComment.setContent(commentRequest.getContent());
+        updatedComment.setApproved(commentRequest.isApproved());
+        updatedComment.setUpdatedAt(LocalDateTime.now());
+
+        if(commentRequest.getParentCommentId() != null){
+            Optional<Comment> existingParentComment = commentRepository.findById(commentRequest.getParentCommentId());
+            if(!existingParentComment.isPresent()){
+                throw new RuntimeException("Parent comment not found");
+            }
+            updatedComment.setParentComment(existingParentComment.get());
+        }
+
+        if(commentRequest.getAuthorId() != null){
+            Optional<BlogUser> existingAuthor = userService.getUserById(commentRequest.getAuthorId());
+            if(!existingAuthor.isPresent()){
+                throw new RuntimeException("Author not found");
+            }
+            updatedComment.setAuthor(existingAuthor.get());
+        }
+
+
+        return commentRepository.save(updatedComment);
     }
 
     public void deleteComment(Integer id){
