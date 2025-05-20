@@ -33,16 +33,9 @@ public class PostLikeRelation {
         return post;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
     public BlogUser getUser() {
         return user;
     }
 
-    public void setUser(BlogUser user) {
-        this.user = user;
-    }
 
 }

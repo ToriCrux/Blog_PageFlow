@@ -245,4 +245,17 @@ public class PostService {
         PostLikeRelationId like = new PostLikeRelationId(postId, userId);
         postLikeRelationRepository.deleteById(like);
     }
+
+    public List<BlogUser> getUsersWhoLikedPost(Integer postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        List<Integer> userIds = postLikeRelationRepository.findUserIdsByPostId(postId);
+
+        if (userIds.isEmpty()) {
+            return List.of();
+        }
+
+        return (List<BlogUser>) userRepository.findAllById(userIds);
+    }
 }

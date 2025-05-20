@@ -3,10 +3,12 @@ package br.edu.infnet.pageflow.controller;
 import br.edu.infnet.pageflow.dto.CommentRequest;
 import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.dto.PostResponse;
+import br.edu.infnet.pageflow.dto.UserInfoResponse;
 import br.edu.infnet.pageflow.entities.BlogUser;
 import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.entities.Post;
 import br.edu.infnet.pageflow.repository.PostCommentRelationRepository;
+import br.edu.infnet.pageflow.repository.PostLikeRelationRepository;
 import br.edu.infnet.pageflow.service.CommentService;
 import br.edu.infnet.pageflow.service.PostService;
 import br.edu.infnet.pageflow.service.UserService;
@@ -15,9 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -29,7 +35,10 @@ public class PostController {
     private CommentService commentService;
     @Autowired
     private PostCommentRelationRepository postCommentRelationRepository;
+    @Autowired
     private UserService userService;
+    @Autowired
+    private PostLikeRelationRepository postLikeRelationRepository;
 
     @GetMapping
     public ResponseEntity<Collection<Post>> getAllPosts() {
@@ -130,25 +139,44 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/like")
-    public ResponseEntity<Post> addLike(@PathVariable Integer postId, @RequestBody Integer userId) {
+    public ResponseEntity<Post> addLike(@PathVariable Integer postId,
+                                        Principal principal) {
+
+        String email = principal.getName();
+        BlogUser user = userService.getUserByEmail(email);
 
         Post existingPost = postService.findById(postId);
-        Optional<BlogUser> existingUser = userService.getUserById(userId);
 
-        if (existingPost == null || existingUser.isEmpty()) {
+        if (existingPost == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-
-        BlogUser user = existingUser.get();
 
         return ResponseEntity.ok(postService.addLikePost(existingPost, user));
     }
 
     @DeleteMapping("/{postId}/like")
-    public ResponseEntity<Void> removeLike(@PathVariable Integer postId, @RequestBody Integer userId) {
-        postService.removeLikePost(postId, userId);
+    public ResponseEntity<Void> removeLike(@PathVariable Integer postId,
+                                           Principal principal) {
+        String email = principal.getName();
+        BlogUser user = userService.getUserByEmail(email);
+        postService.removeLikePost(postId, user.getId());
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("{postId}/likes")
+    public ResponseEntity<List<UserInfoResponse>> getUsersWhoLikedPost(@PathVariable Integer postId) {
+        List<BlogUser> users = postService.getUsersWhoLikedPost(postId);
+        List<UserInfoResponse> usersInfo = users.stream()
+                .map(u -> {
+                    UserInfoResponse info = new UserInfoResponse();
+                    info.setId(u.getId());
+                    info.setName(u.getName());
+                    info.setUsername(u.getUsername());
+                    info.setEmail(u.getEmail());
+                    return info;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(usersInfo);
+    }
 
 }
