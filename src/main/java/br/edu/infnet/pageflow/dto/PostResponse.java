@@ -2,6 +2,7 @@ package br.edu.infnet.pageflow.dto;
 
 import br.edu.infnet.pageflow.entities.Author;
 import br.edu.infnet.pageflow.entities.Category;
+import br.edu.infnet.pageflow.utils.PostStatus;
 
 import java.util.List;
 
@@ -12,17 +13,19 @@ public class PostResponse {
     private String content;
     private Author author;
     private Category category;
+    private PostStatus status;
     private List<CommentResponse> comments;
 
     public PostResponse() {}
 
-    public PostResponse(Integer id, String title, String content, Author author, Category category, List<CommentResponse> comments) {
+    public PostResponse(Integer id, String title, String content, Author author, Category category, List<CommentResponse> comments, PostStatus status) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
         this.category = category;
         this.comments = comments;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -72,4 +75,8 @@ public class PostResponse {
     public void setComments(List<CommentResponse> comments) {
         this.comments = comments;
     }
+
+    public PostStatus getStatus() {return status;}
+
+    public void setStatus(PostStatus status) {this.status = status;}
 }

@@ -1,5 +1,7 @@
 package br.edu.infnet.pageflow.entities;
 
+import br.edu.infnet.pageflow.utils.BlogUserRoles;
+import br.edu.infnet.pageflow.utils.PostStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -39,14 +41,19 @@ public class Post {
     @Transient
     private List<Comment> comments;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
+
     public Post() {
     }
 
-    public Post(String title, String content, Author author) {
+    public Post(String title, String content, Author author, PostStatus status) {
         this.title = title;
         this.content = content;
         this.author = author;
         this.createdAt = LocalDateTime.now();
+        this.status = status;
     }
 
     public Integer getId() {
@@ -112,5 +119,9 @@ public class Post {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
+    public PostStatus getStatus() {return status;}
+
+    public void setStatus(PostStatus status) {this.status = status;}
 }
 

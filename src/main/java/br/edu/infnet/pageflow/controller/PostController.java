@@ -32,6 +32,12 @@ public class PostController {
         return ResponseEntity.ok(postService.getPosts());
     }
 
+    @GetMapping("/draft")
+    public ResponseEntity<Post> getDraftPost() {
+        return ResponseEntity.ok(postService.getDraftPost());
+    }
+
+
     @PostMapping("/new")
     public ResponseEntity<Post> createPost(@RequestBody PostRequest postRequest) {
 

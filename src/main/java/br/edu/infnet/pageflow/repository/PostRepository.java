@@ -1,7 +1,10 @@
 package br.edu.infnet.pageflow.repository;
 
 import br.edu.infnet.pageflow.entities.Post;
+import br.edu.infnet.pageflow.utils.PostStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -16,5 +19,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Optional<Post> getPostById(Integer postId);
 
     List<Post> findAllByOrderByCreatedAtDesc();
+
+    @Query("SELECT p FROM Post p WHERE p.status = br.edu.infnet.pageflow.utils.PostStatus.DRAFT AND p.author.id = :authorId")
+    Optional<Post> getDraftPostByAuthor(@Param("authorId") Integer authorId);
+
 
 }

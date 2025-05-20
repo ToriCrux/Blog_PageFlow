@@ -1,6 +1,7 @@
 package br.edu.infnet.pageflow.entities;
 
 import br.edu.infnet.pageflow.dto.PostRequest;
+import br.edu.infnet.pageflow.utils.PostStatus;
 import net.jqwik.api.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -34,15 +35,22 @@ public class PostTests {
                 .filter(comment -> !comment.isBlank());
     }
 
+    @Provide
+    public Arbitrary<PostStatus> status() {
+        return Arbitraries.of(PostStatus.class);
+    }
+
     @Property
     void testPostMustBeCorrectlyCreated(@ForAll("postTitles") String title,
                                         @ForAll("content") String content,
-                                        @ForAll("validId") Integer authorId) {
+                                        @ForAll("validId") Integer authorId,
+                                        @ForAll("status") PostStatus status) {
         Author author = new Author();
         author.setId(authorId);
         author.setBio("Lorem ipsum dolum sit amet");
 
-        Post newPost = new Post(title, content, author);
+
+        Post newPost = new Post(title, content, author, status);
 
         assertNotNull(newPost);
         assertThat(newPost.getTitle()).isEqualTo(title);
