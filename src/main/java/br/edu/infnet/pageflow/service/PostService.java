@@ -46,8 +46,10 @@ public class PostService {
         post.setAuthor((Author) author);
         post.setStatus(postRequest.getStatus());
 
-        Optional<Category> category = categoryRepository.findById(postRequest.getCategoryId());
-        category.ifPresent(post::setCategory);
+        if(postRequest.getCategoryId() != null) {
+            Optional<Category> category = categoryRepository.findById(postRequest.getCategoryId());
+            category.ifPresent(post::setCategory);
+        }
 
         return postRepository.save(post);
     }
@@ -110,6 +112,7 @@ public class PostService {
         existingPost.setTitle(updatedPost.getTitle());
         existingPost.setContent(updatedPost.getContent());
         existingPost.setUpdatedAt(LocalDateTime.now());
+        existingPost.setStatus(updatedPost.getStatus());
 
         return postRepository.save(existingPost);
     }
