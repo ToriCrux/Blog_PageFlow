@@ -8,6 +8,7 @@ import br.edu.infnet.pageflow.entities.PostCommentRelation;
 import br.edu.infnet.pageflow.repository.CommentRepository;
 import br.edu.infnet.pageflow.repository.PostCommentRelationRepository;
 import br.edu.infnet.pageflow.repository.PostRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -51,10 +52,10 @@ public class CommentService {
         Optional<Comment> existingComment = commentRepository.findById(parentCommentId);
 
         if(!existingComment.isPresent()){
-            throw new RuntimeException("Parent comment not found");
+            throw new EntityNotFoundException("Parent comment not found");
         }
 
-        return (Collection<Comment>) commentRepository.getAllByParentComment(parentCommentId);
+        return (Collection<Comment>) commentRepository.getComentsByParentCommentId(parentCommentId);
 
     }
 
@@ -66,19 +67,17 @@ public class CommentService {
         if(commentRequest.getParentCommentId() != null){
             Optional<Comment> existingParentComment = commentRepository.findById(commentRequest.getParentCommentId());
             if(!existingParentComment.isPresent()){
-                throw new RuntimeException("Parent comment not found");
+                throw new EntityNotFoundException("Parent comment not found");
             }
             comment.setParentComment(existingParentComment.get());
         }
-
         if(commentRequest.getAuthorId() != null){
             Optional<BlogUser> existingAuthor = userService.getUserById(commentRequest.getAuthorId());
             if(!existingAuthor.isPresent()){
-                throw new RuntimeException("Author not found");
+                throw new EntityNotFoundException("Author not found");
             }
             comment.setAuthor(existingAuthor.get());
         }
-
         return commentRepository.save(comment);
     }
 
@@ -87,7 +86,7 @@ public class CommentService {
         Optional<Comment> existingComment = commentRepository.findById(id);
 
         if(!existingComment.isPresent()) {
-            return null;
+            throw new EntityNotFoundException("Comment not found");
         }
 
         Comment updatedComment = existingComment.get();
@@ -98,7 +97,7 @@ public class CommentService {
         if(commentRequest.getParentCommentId() != null){
             Optional<Comment> existingParentComment = commentRepository.findById(commentRequest.getParentCommentId());
             if(!existingParentComment.isPresent()){
-                throw new RuntimeException("Parent comment not found");
+                throw new EntityNotFoundException("Parent comment not found");
             }
             updatedComment.setParentComment(existingParentComment.get());
         }
@@ -106,11 +105,10 @@ public class CommentService {
         if(commentRequest.getAuthorId() != null){
             Optional<BlogUser> existingAuthor = userService.getUserById(commentRequest.getAuthorId());
             if(!existingAuthor.isPresent()){
-                throw new RuntimeException("Author not found");
+                throw new EntityNotFoundException("Author not found");
             }
             updatedComment.setAuthor(existingAuthor.get());
         }
-
 
         return commentRepository.save(updatedComment);
     }

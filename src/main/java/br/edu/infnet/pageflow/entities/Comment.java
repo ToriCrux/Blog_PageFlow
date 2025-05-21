@@ -90,6 +90,7 @@ public class Comment {
     public void setAuthor(BlogUser author) {this.author = author;}
 
     public List<Comment> getSubcomments() {return subcomments;}
+
     public void setSubcomments(List<Comment> subcomments) {this.subcomments = subcomments;}
 }
 

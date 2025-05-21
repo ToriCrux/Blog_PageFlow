@@ -7,6 +7,7 @@ import br.edu.infnet.pageflow.entities.Category;
 import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.entities.Post;
 import br.edu.infnet.pageflow.service.CommentService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,10 +34,18 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @GetMapping("/search/{parentCommentId}")
+    @GetMapping("/parentComment/{parentCommentId}")
     public ResponseEntity<Collection<Comment>> getCommentsByParentComment(@PathVariable Integer parentCommentId) {
-        Collection<Comment> comments = commentService.getCommentsByParentComment(parentCommentId);
-        return ResponseEntity.ok(comments);
+        try {
+            Collection<Comment> comments = commentService.getCommentsByParentComment(parentCommentId);
+            return ResponseEntity.ok(comments);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+
     }
 
 

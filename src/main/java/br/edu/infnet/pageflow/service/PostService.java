@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,6 +64,8 @@ public class PostService {
         return relations.stream().map(PostCommentRelation::getComment).toList();
     }
 
+
+
     public Collection<Post> getPosts() {
 
 //        Collection<Post> posts = (Collection<Post>) postRepository.findAll();
@@ -73,11 +73,29 @@ public class PostService {
 
         for (Post post : posts) {
             List<Comment> comments = getCommentsByPostId(post.getId());
-            comments.forEach(comment -> {
-                List<Comment> subcomments = (List<Comment>) commentRepository.getAllByParentComment(comment.getId());
-                comment.setSubcomments(subcomments);
-            });
-            post.setComments(comments);
+            List<Integer> commentsToRemove = new ArrayList<Integer>();
+
+            if (comments.isEmpty()) {
+                break;
+            }
+
+            for (Comment comment : comments) {
+                if(comment.getParentComment() == null) {
+                    continue;
+                }
+
+                Comment parentElement = comment.getParentComment();
+                if(parentElement.getSubcomments() == null){
+                    parentElement.setSubcomments(new ArrayList<Comment>());
+                }
+                parentElement.getSubcomments().add(comment);
+                comment.setParentComment(null);
+                commentsToRemove.add(comment.getId());
+            }
+
+
+
+            post.setComments(comments.stream().filter(comment -> !commentsToRemove.contains(comment.getId())).collect(Collectors.toList()));
         }
 
         return posts;
@@ -92,7 +110,9 @@ public class PostService {
         List<CommentResponse> commentResponses = postCommentRelations.stream()
                 .map(pcr -> {
                     Comment comment = pcr.getComment();
-                    return new CommentResponse(comment.getId(), comment.getContent(), comment.isApproved());
+                    CommentResponse response = new CommentResponse(comment.getId(), comment.getContent(), comment.isApproved());
+                    return response;
+
                 })
                 .collect(Collectors.toList());
 
@@ -127,12 +147,12 @@ public class PostService {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post não encontrado"));
-        Comment comment = commentRepository.findById(commentId)
+        Comment existingComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found"));
 
         PostCommentRelation postCommentRelation = new PostCommentRelation();
         postCommentRelation.setPost(post);
-        postCommentRelation.setComment(comment);
+        postCommentRelation.setComment(existingComment);
 
         postCommentRelationRepository.save(postCommentRelation);
 
@@ -140,8 +160,17 @@ public class PostService {
 
         List<CommentResponse> commentResponses = postCommentRelations.stream()
                 .map(pcr -> {
-                    Comment existingComment = pcr.getComment();
-                    return new CommentResponse(existingComment.getId(), existingComment.getContent(), existingComment.isApproved());
+                    Comment comment = pcr.getComment();
+                    CommentResponse response = new CommentResponse(comment.getId(), comment.getContent(), comment.isApproved());
+//                    if(comment.getParentComment() != null) {
+//                        response.setParentCommentId(comment.getParentComment().getId());
+//                    }
+//
+//                    if(comment.getAuthor() != null) {
+//                        response.setAuthorId(comment.getAuthor().getId());
+//                    }
+                    return response;
+
                 })
                 .toList();
 

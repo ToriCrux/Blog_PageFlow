@@ -16,7 +16,7 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
     Collection<Comment> getAllComments();
 
 
-    Collection<Comment> getAllByParentComment(Integer parentCommentId);
+    Collection<Comment> getComentsByParentCommentId(Integer parentCommentId);
 
 
 }

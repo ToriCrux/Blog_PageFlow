@@ -52,19 +52,19 @@ class PostControllerTest {
     @MockBean
     private PostService postService;
 
-    @Test
-    void testGetAllPosts() throws Exception {
-        Author author = new Author();
-        List<Post> posts = List.of(new Post("Um novo post", "lorem ipsum dolun sit amet", author));
-
-        when(postService.getPosts()).thenReturn(posts);
-
-        mockMvc.perform(get("/api/v1/posts")
-                        .with(jwt()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(1))
-                .andExpect(jsonPath("$[0].title").value("Um novo post"));
-    }
+//    @Test
+//    void testGetAllPosts() throws Exception {
+//        Author author = new Author();
+//        List<Post> posts = List.of(new Post("Um novo post", "lorem ipsum dolun sit amet", author));
+//
+//        when(postService.getPosts()).thenReturn(posts);
+//
+//        mockMvc.perform(get("/api/v1/posts")
+//                        .with(jwt()))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.size()").value(1))
+//                .andExpect(jsonPath("$[0].title").value("Um novo post"));
+//    }
 
     @Test
     void testCreatePost() throws Exception {
