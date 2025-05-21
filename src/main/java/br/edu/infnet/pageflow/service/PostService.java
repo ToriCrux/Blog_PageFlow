@@ -3,10 +3,13 @@ package br.edu.infnet.pageflow.service;
 import br.edu.infnet.pageflow.dto.CommentResponse;
 import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.dto.PostResponse;
+import br.edu.infnet.pageflow.dto.UserInfoResponse;
 import br.edu.infnet.pageflow.entities.*;
 import br.edu.infnet.pageflow.entities.ids.PostLikeRelationId;
 import br.edu.infnet.pageflow.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -225,30 +228,32 @@ public class PostService {
         postRepository.save(existingPost);
     }
 
-    public Post addLikePost(Post existingPost, BlogUser user) {
-        PostLikeRelationId likeId = new PostLikeRelationId(existingPost.getId(), user.getId());
+    public void addLikePost(Integer postId, BlogUser user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        PostLikeRelationId likeId = new PostLikeRelationId(post.getId(), user.getId());
+
         if(postLikeRelationRepository.existsById(likeId)) {
-            return existingPost;
+            return;
         }
 
-        PostLikeRelation like = new PostLikeRelation(existingPost, user);
+        PostLikeRelation like = new PostLikeRelation(post, user);
 
-        return postLikeRelationRepository.save(like).getPost();
+        postLikeRelationRepository.save(like);
     }
 
     public void removeLikePost(Integer postId, Integer userId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
-        BlogUser user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
 
         PostLikeRelationId like = new PostLikeRelationId(postId, userId);
         postLikeRelationRepository.deleteById(like);
     }
 
-    public List<BlogUser> getUsersWhoLikedPost(Integer postId) {
+    public List<UserInfoResponse> getUsersWhoLikedPost(Integer postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
 
         List<Integer> userIds = postLikeRelationRepository.findUserIdsByPostId(postId);
 
@@ -256,6 +261,28 @@ public class PostService {
             return List.of();
         }
 
-        return (List<BlogUser>) userRepository.findAllById(userIds);
+        List<BlogUser> users = (List<BlogUser>) userRepository.findAllById(userIds);
+
+        List<UserInfoResponse> usersInfo = users.stream()
+                .map(u -> {
+                    UserInfoResponse info = new UserInfoResponse();
+                    info.setId(u.getId());
+                    info.setName(u.getName());
+                    info.setUsername(u.getUsername());
+                    info.setEmail(u.getEmail());
+                    return info;
+                })
+                .collect(Collectors.toList());
+
+        return usersInfo;
+    }
+
+    public Integer countUsersWhoLikedPost(Integer postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        Integer count = postLikeRelationRepository.countByCommentId(postId);
+
+        return count;
     }
 }

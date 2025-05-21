@@ -13,4 +13,7 @@ import java.util.List;
 public interface PostLikeRelationRepository extends CrudRepository<PostLikeRelation, PostLikeRelationId> {
     @Query("SELECT plr.user.id FROM PostLikeRelation plr WHERE plr.post.id = :postId")
     List<Integer> findUserIdsByPostId(@Param("postId") Integer postId);
+
+    @Query("SELECT COUNT(*) AS result FROM PostLikeRelation plr WHERE plr.post.id = :postId")
+    Integer countByCommentId(@Param("postId") Integer postId);
 }

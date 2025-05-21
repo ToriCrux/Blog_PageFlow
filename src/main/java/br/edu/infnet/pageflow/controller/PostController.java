@@ -12,10 +12,12 @@ import br.edu.infnet.pageflow.repository.PostLikeRelationRepository;
 import br.edu.infnet.pageflow.service.CommentService;
 import br.edu.infnet.pageflow.service.PostService;
 import br.edu.infnet.pageflow.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -139,44 +141,57 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/like")
-    public ResponseEntity<Post> addLike(@PathVariable Integer postId,
-                                        Principal principal) {
-
+    public ResponseEntity<?> addLike(@PathVariable Integer postId, Principal principal) {
         String email = principal.getName();
         BlogUser user = userService.getUserByEmail(email);
-
-        Post existingPost = postService.findById(postId);
-
-        if (existingPost == null) {
+        try {
+            postService.addLikePost(postId, user);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
-        return ResponseEntity.ok(postService.addLikePost(existingPost, user));
     }
 
     @DeleteMapping("/{postId}/like")
-    public ResponseEntity<Void> removeLike(@PathVariable Integer postId,
-                                           Principal principal) {
+    public ResponseEntity<?> removeLike(@PathVariable Integer postId, Principal principal) {
         String email = principal.getName();
         BlogUser user = userService.getUserByEmail(email);
-        postService.removeLikePost(postId, user.getId());
-        return ResponseEntity.noContent().build();
+        try {
+            postService.removeLikePost(postId, user.getId());
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
     }
 
     @GetMapping("{postId}/likes")
     public ResponseEntity<List<UserInfoResponse>> getUsersWhoLikedPost(@PathVariable Integer postId) {
-        List<BlogUser> users = postService.getUsersWhoLikedPost(postId);
-        List<UserInfoResponse> usersInfo = users.stream()
-                .map(u -> {
-                    UserInfoResponse info = new UserInfoResponse();
-                    info.setId(u.getId());
-                    info.setName(u.getName());
-                    info.setUsername(u.getUsername());
-                    info.setEmail(u.getEmail());
-                    return info;
-                })
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(usersInfo);
+        try {
+            List<UserInfoResponse> users = postService.getUsersWhoLikedPost(postId);
+            return ResponseEntity.ok(users);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
+    @GetMapping("{postId}/likes/count")
+    public ResponseEntity<Integer> countUsersWhoLikedPost(@PathVariable Integer postId) {
+        try {
+            Integer count = postService.countUsersWhoLikedPost(postId);
+            return ResponseEntity.ok(count);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
 }
