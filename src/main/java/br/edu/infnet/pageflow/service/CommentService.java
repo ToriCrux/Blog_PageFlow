@@ -1,15 +1,18 @@
 package br.edu.infnet.pageflow.service;
 
 import br.edu.infnet.pageflow.dto.CommentRequest;
+import br.edu.infnet.pageflow.dto.UserInfoResponse;
 import br.edu.infnet.pageflow.entities.*;
 import br.edu.infnet.pageflow.entities.ids.CommentLikeRelationId;
 import br.edu.infnet.pageflow.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -79,26 +82,63 @@ public class CommentService {
     }
 
 
-    public Comment addLikeComment(Comment existingComment, BlogUser user) {
-        CommentLikeRelationId likeId = new CommentLikeRelationId(existingComment.getId(), user.getId());
+    public void addLikeComment(Integer commentId, BlogUser user) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+
+        CommentLikeRelationId likeId = new CommentLikeRelationId(comment.getId(), user.getId());
 
         if(commentLikeRelationRepository.existsById(likeId)) {
-            return existingComment;
+            return;
         }
 
-        CommentLikeRelation like = new CommentLikeRelation(existingComment, user);
+        CommentLikeRelation like = new CommentLikeRelation(comment, user);
 
-        return commentLikeRelationRepository.save(like).getComment();
+        commentLikeRelationRepository.save(like);
     }
 
     public void removeLikeComment(Integer commentId, Integer userId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
-        BlogUser user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
 
         CommentLikeRelationId like = new CommentLikeRelationId(commentId, userId);
+
         commentLikeRelationRepository.deleteById(like);
+    }
+
+    public List<UserInfoResponse> getUsersWhoLikedComment(Integer commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+
+        List<Integer> userIds = commentLikeRelationRepository.findUserIdsByCommentId(commentId);
+
+        if (userIds.isEmpty()) {
+            return List.of();
+        }
+
+        List<BlogUser> users = (List<BlogUser>) userRepository.findAllById(userIds);
+
+        List<UserInfoResponse> usersInfo = users.stream()
+                .map(u -> {
+                    UserInfoResponse info = new UserInfoResponse();
+                    info.setId(u.getId());
+                    info.setName(u.getName());
+                    info.setUsername(u.getUsername());
+                    info.setEmail(u.getEmail());
+                    return info;
+                })
+                .collect(Collectors.toList());
+
+        return usersInfo;
+    }
+
+    public Integer countUsersWhoLikedComment(Integer commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+
+        Integer count = commentLikeRelationRepository.countByCommentId(commentId);
+
+        return count;
     }
 
 }
