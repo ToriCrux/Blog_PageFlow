@@ -82,19 +82,21 @@ public class CommentService {
     }
 
 
-    public void addLikeComment(Integer commentId, BlogUser user) {
+    public boolean addLikeComment(Integer commentId, BlogUser user) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
 
         CommentLikeRelationId likeId = new CommentLikeRelationId(comment.getId(), user.getId());
 
         if(commentLikeRelationRepository.existsById(likeId)) {
-            return;
+            return false;
         }
 
         CommentLikeRelation like = new CommentLikeRelation(comment, user);
 
         commentLikeRelationRepository.save(like);
+
+        return true;
     }
 
     public void removeLikeComment(Integer commentId, Integer userId) {

@@ -44,13 +44,19 @@ public class CommentController {
     public ResponseEntity<?> addLike(@PathVariable Integer commentId, Principal principal) {
         String email = principal.getName();
         BlogUser user = userService.getUserByEmail(email);
+        boolean likeCreated;
         try {
-            commentService.addLikeComment(commentId, user);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            likeCreated = commentService.addLikeComment(commentId, user);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        if (likeCreated) {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else {
+            return ResponseEntity.ok().build();
         }
     }
 
