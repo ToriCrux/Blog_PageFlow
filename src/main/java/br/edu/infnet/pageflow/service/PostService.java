@@ -228,19 +228,20 @@ public class PostService {
         postRepository.save(existingPost);
     }
 
-    public void addLikePost(Integer postId, BlogUser user) {
+    public boolean addLikePost(Integer postId, BlogUser user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found"));
 
         PostLikeRelationId likeId = new PostLikeRelationId(post.getId(), user.getId());
 
         if(postLikeRelationRepository.existsById(likeId)) {
-            return;
+            return false;
         }
 
         PostLikeRelation like = new PostLikeRelation(post, user);
 
         postLikeRelationRepository.save(like);
+        return true;
     }
 
     public void removeLikePost(Integer postId, Integer userId) {

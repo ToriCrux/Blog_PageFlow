@@ -144,13 +144,19 @@ public class PostController {
     public ResponseEntity<?> addLike(@PathVariable Integer postId, Principal principal) {
         String email = principal.getName();
         BlogUser user = userService.getUserByEmail(email);
+        boolean likeCreated;
         try {
-            postService.addLikePost(postId, user);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            likeCreated = postService.addLikePost(postId, user);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        if (likeCreated) {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else {
+            return ResponseEntity.ok().build();
         }
     }
 
