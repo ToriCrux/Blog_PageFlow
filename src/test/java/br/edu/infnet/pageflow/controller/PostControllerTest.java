@@ -3,11 +3,15 @@ package br.edu.infnet.pageflow.controller;
 import br.edu.infnet.pageflow.TestSecurityConfig;
 import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.entities.Author;
+import br.edu.infnet.pageflow.entities.BlogUser;
 import br.edu.infnet.pageflow.entities.Category;
 import br.edu.infnet.pageflow.entities.Post;
+import br.edu.infnet.pageflow.repository.PostCommentRelationRepository;
 import br.edu.infnet.pageflow.security.jwt.JwtUtil;
 import br.edu.infnet.pageflow.service.AuthUserDetailsService;
+import br.edu.infnet.pageflow.service.CommentService;
 import br.edu.infnet.pageflow.service.PostService;
+import br.edu.infnet.pageflow.service.UserService;
 import br.edu.infnet.pageflow.utils.PostStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +24,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -52,6 +58,15 @@ class PostControllerTest {
 
     @MockBean
     private PostService postService;
+
+    @MockBean
+    private CommentService commentService;
+
+    @MockBean
+    private PostCommentRelationRepository postCommentRelationRepository;
+
+    @MockBean
+    private UserService userService;
 
     @Test
     void testGetAllPosts() throws Exception {
@@ -136,4 +151,33 @@ class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void testGetDraftPostSuccessfully() throws Exception {
+        String email = "usuario@exemplo.com";
+
+        Author author = new Author();
+        author.setId(1);
+        author.setEmail(email);
+
+        Post draftPost = new Post();
+        draftPost.setId(1);
+        draftPost.setTitle("Rascunho");
+        draftPost.setContent("Conteúdo do rascunho");
+        draftPost.setAuthor(author);
+        draftPost.setStatus(PostStatus.PUBLISHED);
+
+        when(userService.getUserByEmail(email)).thenReturn(author);
+        when(postService.getDraftPost(author.getId())).thenReturn(Optional.of(draftPost));
+
+        mockMvc.perform(get("/api/v1/posts/draft")
+                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(jwt -> jwt.claim("sub", email)))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Rascunho"))
+                .andExpect(jsonPath("$.content").value("Conteúdo do rascunho"))
+                .andExpect(jsonPath("$.status").value(PostStatus.PUBLISHED.toString()));
+    }
+
 }
