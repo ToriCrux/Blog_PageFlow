@@ -5,8 +5,10 @@ import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.entities.Author;
 import br.edu.infnet.pageflow.entities.Category;
 import br.edu.infnet.pageflow.entities.Post;
+import br.edu.infnet.pageflow.repository.PostCommentRelationRepository;
 import br.edu.infnet.pageflow.security.jwt.JwtUtil;
 import br.edu.infnet.pageflow.service.AuthUserDetailsService;
+import br.edu.infnet.pageflow.service.CommentService;
 import br.edu.infnet.pageflow.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,19 +54,26 @@ class PostControllerTest {
     @MockBean
     private PostService postService;
 
-//    @Test
-//    void testGetAllPosts() throws Exception {
-//        Author author = new Author();
-//        List<Post> posts = List.of(new Post("Um novo post", "lorem ipsum dolun sit amet", author));
-//
-//        when(postService.getPosts()).thenReturn(posts);
-//
-//        mockMvc.perform(get("/api/v1/posts")
-//                        .with(jwt()))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.size()").value(1))
-//                .andExpect(jsonPath("$[0].title").value("Um novo post"));
-//    }
+    @MockBean
+    private CommentService commentService;
+
+    @MockBean
+    private PostCommentRelationRepository postCommentRelationRepository;
+
+
+    @Test
+    void testGetAllPosts() throws Exception {
+        Author author = new Author();
+        List<Post> posts = List.of(new Post("Um novo post", "lorem ipsum dolun sit amet", author));
+
+        when(postService.getPosts()).thenReturn(posts);
+
+        mockMvc.perform(get("/api/v1/posts")
+                        .with(jwt()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].title").value("Um novo post"));
+    }
 
     @Test
     void testCreatePost() throws Exception {
