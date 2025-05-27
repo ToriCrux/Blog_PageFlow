@@ -20,8 +20,8 @@ public class PostTests {
         return Arbitraries.strings()
                 .withChars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ")
                 .ofMinLength(5)
-                .ofMaxLength(60) // Garante que o título não ultrapasse 60 caracteres
-                .map(String::trim) // Remove espaços extras no início e no fim
+                .ofMaxLength(60)
+                .map(String::trim)
                 .filter(title -> !title.isBlank() && title.length() <= 60);
     }
 
