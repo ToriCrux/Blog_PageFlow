@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Serviço para a aplicação Spring Boot (API)
+  api:
+    build:
+      context: ./PageFlow-api
+      dockerfile: Dockerfile
+    container_name: blog-pageflow-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - db
+    networks:
+      - blog-network
+
+  # Serviço para a aplicação Next.js (Frontend)
+  front:
+    build:
+      context: ./PageFlow-front
+      dockerfile: Dockerfile
+    container_name: blog-pageflow-front
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://api:8080
+    depends_on:
+      - api
+    networks:
+      - blog-network
+
+  # Serviço para o banco de dados PostgreSQL
+  db:
+    image: postgres:latest
+    container_name: blog-pageflow-db
+    environment:
+      POSTGRES_DB: pageflow
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - blog-network
+
+  # Serviço para o PgAdmin
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: blog-pageflow-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
+    driver: bridge
+
+volumes:
+  db_data:
