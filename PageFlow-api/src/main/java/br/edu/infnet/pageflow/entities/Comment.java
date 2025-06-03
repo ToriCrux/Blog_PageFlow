@@ -3,6 +3,7 @@ package br.edu.infnet.pageflow.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "comments")
@@ -15,16 +16,8 @@ public class Comment {
     @Column(length = 500)
     private String content;
 
-//    @ManyToOne
-//    @JoinColumn(name = "post_id")
-//    private Post post;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-
     @Column(nullable = false)
-    private boolean approved = false; // Para moderação dos comentários
+    private boolean approved = false;
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -32,7 +25,14 @@ public class Comment {
     @Column
     private LocalDateTime updatedAt;
 
-    // Getters e Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getContent() {
         return content;
     }
@@ -47,6 +47,14 @@ public class Comment {
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getUpdatedAt() {
