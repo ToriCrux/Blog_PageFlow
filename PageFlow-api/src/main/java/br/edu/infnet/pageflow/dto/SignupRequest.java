@@ -1,8 +1,6 @@
 package br.edu.infnet.pageflow.dto;
 
 import br.edu.infnet.pageflow.utils.BlogUserRoles;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 public class SignupRequest {
 
