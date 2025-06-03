@@ -2,10 +2,16 @@ package br.edu.infnet.pageflow.entities;
 
 import br.edu.infnet.pageflow.utils.BlogUserRoles;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type")
@@ -49,73 +55,4 @@ public class BlogUser {
         this.password = password;
     }
 
-    public BlogUser() {
-
-    }
-
-    // Getters e Setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public BlogUserRoles getRole() {
-        return role;
-    }
-
-    public void setRole(BlogUserRoles role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

@@ -1,10 +1,14 @@
 package br.edu.infnet.pageflow.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "categories")
 public class Category {
 
@@ -18,23 +22,5 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Post> posts;
 
-    // Getters e Setters
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
 

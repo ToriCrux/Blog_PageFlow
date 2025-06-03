@@ -1,12 +1,18 @@
 package br.edu.infnet.pageflow.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;
@@ -26,10 +32,6 @@ public class PasswordResetToken {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public PasswordResetToken() {
-        super();
-    }
-
     public PasswordResetToken(final String token) {
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
@@ -43,38 +45,6 @@ public class PasswordResetToken {
         this.blogUser = blogUser;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
         this.createdAt = LocalDateTime.now();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public BlogUser getBlogUser() {
-        return blogUser;
-    }
-
-    public void setBlogUser(BlogUser blogUser) {
-        this.blogUser = blogUser;
-    }
-
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
     }
 
     private Date calculateExpiryDate(final int expiryTimeInMinutes) {
