@@ -20,7 +20,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     Optional<Post> getPostById(Integer postId);
 
-    @Query("SELECT p FROM Post p WHERE p.status = br.edu.infnet.pageflow.utils.PostStatus.PUBLISHED ORDER BY p.createdAt DESC")
+//    @Query("SELECT p FROM Post p WHERE p.status = br.edu.infnet.pageflow.utils.PostStatus.PUBLISHED ORDER BY p.createdAt DESC")
+    @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")
     List<Post> findAllByOrderByCreatedAtDesc();
 
     @Query("SELECT p FROM Post p WHERE p.status = br.edu.infnet.pageflow.utils.PostStatus.DRAFT AND p.author.id = :authorId")

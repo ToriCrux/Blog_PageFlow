@@ -41,7 +41,7 @@ public class Post {
     @Transient
     private List<Comment> comments;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(EnumType.STRING)
     private PostStatus status;
 

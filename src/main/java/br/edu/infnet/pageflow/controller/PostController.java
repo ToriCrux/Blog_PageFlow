@@ -33,6 +33,7 @@ public class PostController {
     private PostCommentRelationRepository postCommentRelationRepository;
     @Autowired
     private UserService userService;
+
     @GetMapping
     public ResponseEntity<Collection<Post>> getAllPosts() {
         return ResponseEntity.ok(postService.getPosts());
