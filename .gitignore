@@ -315,3 +315,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+PageFlow-front/node_modules
