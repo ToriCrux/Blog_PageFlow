@@ -1,13 +1,19 @@
 package br.edu.infnet.pageflow.controller;
 
+import br.edu.infnet.pageflow.dto.CommentRequest;
 import br.edu.infnet.pageflow.dto.PostRequest;
+import br.edu.infnet.pageflow.dto.PostResponse;
+import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.entities.Post;
+import br.edu.infnet.pageflow.repository.PostCommentRelationRepository;
+import br.edu.infnet.pageflow.service.CommentService;
 import br.edu.infnet.pageflow.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @RestController
@@ -16,6 +22,10 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private PostCommentRelationRepository postCommentRelationRepository;
 
     @GetMapping
     public ResponseEntity<Collection<Post>> getAllPosts() {
@@ -29,7 +39,6 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-//        Post post = new Post(postRequest.getTitle(), postRequest.getContent(), null);
         Post createdPost = postService.createPost(postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
@@ -43,6 +52,53 @@ public class PostController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Integer id) {
         postService.deletePost(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{postId}/comment")
+    public ResponseEntity<PostResponse> addComment(@PathVariable Integer postId, @RequestBody CommentRequest commentRequest) {
+
+        Post existingPost = postService.findById(postId);
+
+        if (existingPost == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Comment comment = commentService.createComment(commentRequest);
+
+        return ResponseEntity.ok(postService.addCommentToPost(existingPost.getId(), comment.getId()));
+    }
+
+    @PutMapping("/{postId}/{commentId}")
+    public ResponseEntity<Post> updateComment(@PathVariable Integer postId, @PathVariable Integer commentId, @RequestBody CommentRequest commentRequest) {
+        Post existingPost = postService.findById(postId);
+        if (existingPost == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Comment existingComment = postService.getCommentById(commentId);
+        if (existingComment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        existingComment.setContent(commentRequest.getContent());
+        existingComment.setApproved(commentRequest.isApproved());
+        existingComment.setUpdatedAt(LocalDateTime.now());
+
+        return ResponseEntity.ok(existingPost);
+    }
+
+    @DeleteMapping("/{postId}/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer postId, @PathVariable Integer commentId) {
+        Post existingPost = postService.findById(postId);
+        if (existingPost == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Comment existingComment = postService.getCommentById(commentId);
+        if (existingComment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        postService.deleteCommentFromPost(existingPost.getId(), commentId);
+
         return ResponseEntity.noContent().build();
     }
 
