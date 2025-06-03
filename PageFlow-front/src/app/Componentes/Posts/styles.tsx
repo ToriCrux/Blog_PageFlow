@@ -33,9 +33,17 @@ export const PostTitle = tw.h2`
   mb-1
 `;
 
-export const PostContent = tw.p`
+export const PostContent = tw.div`
   text-sm
   text-gray-700
+  [&_strong]:font-bold
+  [&_em]:italic
+  [&_ul]:list-disc
+  [&_ul]:pl-6
+  [&_ol]:list-decimal
+  [&_ol]:pl-6
+  [&_a]:text-blue-600
+  [&_a]:underline
 `;
 
 export const PostFooter = tw.div`
