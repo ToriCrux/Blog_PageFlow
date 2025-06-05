@@ -7,15 +7,18 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+
 @Table(name = "categories")
 public class Category {
 
     @Id
+    @Getter
+    @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Getter
+    @Setter
     @Column(nullable = false, unique = true)
     private String name;
 

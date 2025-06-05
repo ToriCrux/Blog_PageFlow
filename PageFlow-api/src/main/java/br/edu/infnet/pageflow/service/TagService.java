@@ -1,6 +1,5 @@
 package br.edu.infnet.pageflow.service;
 
-import br.edu.infnet.pageflow.dto.TagRequest;
 import br.edu.infnet.pageflow.entities.Tag;
 import br.edu.infnet.pageflow.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class TagService {

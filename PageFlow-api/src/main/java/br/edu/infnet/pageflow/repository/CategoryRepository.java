@@ -11,8 +11,6 @@ import java.util.Collection;
 @Repository
 public interface CategoryRepository extends CrudRepository<Category, Integer> {
 
-    // exemplos de queries que podem ser criadas além das
-    // queries default da classe CrudRepository
     @Query("from Category")
     Collection<Category> getAllCategories(Sort sort);
 

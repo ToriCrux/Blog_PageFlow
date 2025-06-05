@@ -44,9 +44,12 @@ public class PostService {
         post.setTitle(postRequest.getTitle());
         post.setContent(postRequest.getContent());
         post.setAuthor((Author) author);
+        post.setStatus(postRequest.getStatus());
 
-        Optional<Category> category = categoryRepository.findById(postRequest.getCategoryId());
-        category.ifPresent(post::setCategory);
+        if(postRequest.getCategoryId() != null) {
+            Optional<Category> category = categoryRepository.findById(postRequest.getCategoryId());
+            category.ifPresent(post::setCategory);
+        }
 
         return postRepository.save(post);
     }
@@ -97,6 +100,7 @@ public class PostService {
         response.setTitle(post.getTitle());
         response.setContent(post.getContent());
         response.setComments(commentResponses);
+        response.setStatus(post.getStatus());
 
         return response;
     }
@@ -108,6 +112,7 @@ public class PostService {
         existingPost.setTitle(updatedPost.getTitle());
         existingPost.setContent(updatedPost.getContent());
         existingPost.setUpdatedAt(LocalDateTime.now());
+        existingPost.setStatus(updatedPost.getStatus());
 
         return postRepository.save(existingPost);
     }
@@ -148,6 +153,7 @@ public class PostService {
         postResponse.setComments(commentResponses);
         postResponse.setAuthor(post.getAuthor());
         postResponse.setCategory(post.getCategory());
+        postResponse.setStatus(post.getStatus());
 
         return postResponse;
 
@@ -203,6 +209,10 @@ public class PostService {
         Collection<Post> searchedPosts = postRepository.findByCategoryId(category.getId());
         return searchedPosts;
 
+    }
+
+    public Optional<Post> getDraftPost(Integer authorId){
+        return postRepository.getDraftPostByAuthor(authorId);
     }
 
     public Collection<Post> findByTagName(String tagName) {
