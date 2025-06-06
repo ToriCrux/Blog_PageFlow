@@ -7,14 +7,7 @@ import { useUserData } from "./useUserData";
 import { MenuItemWithIcon } from "./MenuItemWithIcon";
 import { getAllPosts } from "../../API/Posts/GetPosts/GetPostsAPI";
 
-import {
-  Container,
-  MenuWrapper,
-  UserInfo,
-  UserName,
-  UserStatus,
-  Footer
-} from "./styles";
+import { Container, MenuWrapper, UserInfo, UserName, UserStatus, Footer } from "./styles";
 
 import { poppins } from "../../fonts";
 
@@ -25,7 +18,16 @@ export default function BarraEsquerda() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleGoTo = (path: string) => router.push(path);
+  const logout = () => {
+    localStorage.removeItem("token");
+  };
+
+  const handleGoTo = (path: string) => {
+    if (path === "/Login") {
+      logout();
+    }
+    router.push(path);
+  };
 
   useEffect(() => {
     const fetchUserPostCount = async () => {
@@ -43,11 +45,7 @@ export default function BarraEsquerda() {
 
   return (
     <div className={poppins.className}>
-      <Container
-        onMouseEnter={() => setExpanded(true)}
-        onMouseLeave={() => setExpanded(false)}
-        $expanded={expanded}
-      >
+      <Container onMouseEnter={() => setExpanded(true)} onMouseLeave={() => setExpanded(false)} $expanded={expanded}>
         <MenuWrapper>
           {expanded && user && (
             <UserInfo>
@@ -56,7 +54,10 @@ export default function BarraEsquerda() {
                 <UserName>{user.name}</UserName>
                 {token ? (
                   <UserStatus>
-                    🟢 Ativo <span style={{ color: "white" }}>&nbsp;•&nbsp; {userPostCount} post{userPostCount !== 1 ? "s" : ""}</span>
+                    🟢 Ativo{" "}
+                    <span style={{ color: "white" }}>
+                      &nbsp;•&nbsp; {userPostCount} post{userPostCount !== 1 ? "s" : ""}
+                    </span>
                   </UserStatus>
                 ) : (
                   <UserStatus>🔴 Offline</UserStatus>
@@ -91,21 +92,18 @@ export default function BarraEsquerda() {
             selected={pathname === "/User"}
             onClick={() => handleGoTo("/User")}
           />
+          <MenuItemWithIcon
+            icon="fas fa-right-from-bracket"
+            label="Logout"
+            expanded={expanded}
+            selected={pathname === "/Login"}
+            onClick={() => handleGoTo("/Login")}
+          />
         </MenuWrapper>
 
         <Footer>
-          <MenuItemWithIcon
-            icon="fas fa-cog"
-            label="Settings"
-            expanded={expanded}
-            onClick={() => {}}
-          />
-          <MenuItemWithIcon
-            icon="fas fa-exclamation-circle"
-            label="Support"
-            expanded={expanded}
-            onClick={() => {}}
-          />
+          <MenuItemWithIcon icon="fas fa-cog" label="Settings" expanded={expanded} onClick={() => {}} />
+          <MenuItemWithIcon icon="fas fa-exclamation-circle" label="Support" expanded={expanded} onClick={() => {}} />
         </Footer>
       </Container>
     </div>
