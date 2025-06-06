@@ -8,7 +8,6 @@ import {
   AuthorImage,
   PostTitle,
   PostContent,
-  CommentBox,
   DeleteIcon,
   EditIcon,
   SendEditIcon,
@@ -43,14 +42,11 @@ export default function PostUnit({
   editingPostId,
   editedTitle,
   editedContent,
-  commentInput,
   setEditedTitle,
   setEditedContent,
-  setCommentInput,
   handleDelete,
   handleEdit,
   handleSubmitEdit,
-  handleCommentSubmit,
 }: Props) {
   const [visibleComments, setVisibleComments] = useState<Record<number, boolean>>({});
 
@@ -67,17 +63,6 @@ export default function PostUnit({
 
   const handleContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEditedContent(e.target.value);
-  };
-
-  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    setCommentInput((prev: Record<number, string>) => {
-      return {
-        ...prev,
-        [post.id]: e.target.value,
-      };
-    });
   };
 
   return (
