@@ -1,39 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import {
-  PostContainer,
-  TextArea,
-  Divider,
-  ActionsRow,
-  ActionButton,
-  SendButton,
-} from "./styles";
-import { createPost } from "../../API/WritePost/WritePostApi";
+import { PostContainer, Divider, ActionsRow, ActionButton, SendButton, ToggleCheckbox } from "./styles";
 
-import { Montserrat, Poppins } from "next/font/google";
-export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
-export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
+import { useCriarPost } from "./useCriarPost";
+import TinyEditorWrapper from "./TinyEditorWrapper";
+
+import { poppins } from "../../fonts";
 
 export default function CriarPost() {
-  const [title, setTitle] = useState("");
-  const [post, setPost] = useState("");
-
-  const handleSend = async () => {
-    if (post.trim() === "" || title.trim() === "") return;
-
-    const response = await createPost({
-      title,
-      content: post,
-      categoryId: 1,
-    });
-
-    if (response) {
-      console.log("Post criado com sucesso:");
-      setPost("");
-      setTitle("");
-    }
-  };
+  const {
+    title,
+    setTitle,
+    post,
+    setPost,
+    categorias,
+    selectedCategoria,
+    setSelectedCategoria,
+    isDraft,
+    setIsDraft,
+    handleSend,
+  } = useCriarPost();
 
   return (
     <div className={poppins.className}>
@@ -46,16 +32,42 @@ export default function CriarPost() {
           className="w-full bg-transparent resize-none outline-none text-gray-700 placeholder-gray-500 mb-2"
         />
 
-        <TextArea
-          placeholder="Write a post..."
+        <TinyEditorWrapper
+          apiKey="4knoygedy11gmj5630ocpttktkw3zaeynfopcxk93zn86moc"
           value={post}
-          onChange={(e) => setPost(e.target.value)}
+          onEditorChange={(content) => setPost(content)}
+          init={{
+            height: 300,
+            menubar: false,
+            plugins: [],
+            toolbar:
+              "undo redo | formatselect | bold italic underline | " +
+              "alignleft aligncenter alignright alignjustify | " +
+              "bullist numlist outdent indent | removeformat | help",
+            content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+          }}
         />
+
+        <select
+          value={selectedCategoria ?? ""}
+          onChange={(e) => setSelectedCategoria(Number(e.target.value))}
+          className="w-full mt-4 mb-2 p-2 rounded bg-white text-gray-800 border border-gray-300"
+        >
+          {categorias.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
 
         <Divider />
 
         <ActionsRow>
           <div className="flex gap-2">
+            <ToggleCheckbox $checked={isDraft} onClick={() => setIsDraft(!isDraft)}>
+              <i className="fa-solid fa-pencil mr-2"></i>
+              {isDraft ? "Rascunho Ativo" : "Marcar como Rascunho"}
+            </ToggleCheckbox>
             <ActionButton>
               <i className="fas fa-image mr-2" />
               Pictures

@@ -1,8 +1,19 @@
 package br.edu.infnet.pageflow.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 @Entity
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @DiscriminatorValue("AUTHOR")
 public class Author extends BlogUser {
 
@@ -15,21 +26,6 @@ public class Author extends BlogUser {
 
     public Author(String email, String password) {
         super(email, password);
-    }
-
-    public Author() {
-        super();
-    }
-
-//    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Post> posts;
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
     }
 
 }

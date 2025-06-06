@@ -1,11 +1,9 @@
-'use client';
+// Cadastro/Cadastro.tsx
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { cadastrarUsuario } from "./apiService";
-import { validarFormulario } from "./validarFormulario";
-
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import {
   Container,
   LeftSection,
@@ -30,56 +28,10 @@ import {
   LoginImage
 } from "./styles";
 
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import { Montserrat, Poppins } from "next/font/google";
-
- const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
- const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
+import { useCadastro } from "./useCadastro";
 
 export default function Cadastro() {
-  const [form, setForm] = useState({
-    name: "",
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "AUTHOR"
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async () => {
-    const resultado = validarFormulario(form);
-
-    if (!resultado.valido) {
-      alert(resultado.mensagens.join("\n"));
-      return;
-    }
-
-    try {
-      await cadastrarUsuario({
-        name: form.name,
-        username: form.username,
-        email: form.email,
-        password: form.password,
-        role: form.role
-      });
-
-      alert("Usuário cadastrado com sucesso!");
-      setForm({
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "ADMINISTRATOR"
-      });
-    } catch (error: any) {
-      alert("Erro ao cadastrar usuário: " + error.message);
-    }
-  };
+  const { form, handleChange, handleSubmit } = useCadastro();
 
   return (
     <Container>

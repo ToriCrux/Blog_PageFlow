@@ -28,8 +28,8 @@ export const loginUsuario = async (payload: LoginPayload): Promise<LoginResponse
     const result = await response.json();
     return result;
 
-  } catch (error: any) {
-    if (error.message === "Failed to fetch") {
+  } catch (error) {
+    if (error instanceof Error && error.message === "Failed to fetch") {
       throw new Error("Não foi possível conectar ao servidor. Verifique se a API está rodando.");
     }
     throw error;

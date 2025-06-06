@@ -5,7 +5,19 @@ interface CreatePostPayload {
   content: string;
 }
 
-export const createPost = async (payload: CreatePostPayload): Promise<any | null> => {
+interface PostResponse {
+  id: number;
+  title: string;
+  content: string;
+  authorId: number;
+  categoryId: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export const createPost = async (
+  payload: CreatePostPayload
+): Promise<PostResponse | null> => {
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -32,13 +44,13 @@ export const createPost = async (payload: CreatePostPayload): Promise<any | null
         title: payload.title,
         content: payload.content,
         authorId: authorId,
-        categoryId: 1, // 🔒 FIXO como no Postman
+        categoryId: 1,
       }),
     });
 
     if (!response.ok) throw new Error("Erro ao criar o post.");
 
-    const data = await response.json();
+    const data: PostResponse = await response.json();
     return data;
   } catch (error) {
     console.error("Erro ao enviar post:", error);
@@ -46,7 +58,7 @@ export const createPost = async (payload: CreatePostPayload): Promise<any | null
   }
 };
 
-// 🔍 Função auxiliar para decodificar JWT
+// 🔍 JWT Decode
 function parseJwt(token: string) {
   try {
     const base64Url = token.split(".")[1];

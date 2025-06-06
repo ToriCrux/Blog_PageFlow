@@ -1,11 +1,11 @@
 package br.edu.infnet.pageflow.service;
 
 import br.edu.infnet.pageflow.entities.BlogUser;
+import br.edu.infnet.pageflow.repository.UserRepository;
 import br.edu.infnet.pageflow.utils.BlogUserRoles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import br.edu.infnet.pageflow.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,8 +33,6 @@ public class AuthUserDetailsService implements UserDetailsService {
 
         return new User(user.getEmail(), user.getPassword(), authorities);
     }
-
-
 
     private BlogUserRoles getUserRole(BlogUser user) {
         return switch (String.valueOf(user.getRole())) {

@@ -1,59 +1,64 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import {
-  Container,
-  MenuWrapper,
-  IconWrapper,
-  IconLabel,
-  UserInfo,
-  UserName,
-  UserStatus,
-  MenuItem,
-  Footer
-} from "./styles";
-
 import { usePathname, useRouter } from "next/navigation";
-import { BlogUser, fetchUserData } from "@/app/API/UserAPI/ApiUserData";
+import { useUserData } from "./useUserData";
+import { MenuItemWithIcon } from "./MenuItemWithIcon";
+import { getAllPosts } from "../../API/Posts/GetPosts/GetPostsAPI";
 
-import { Montserrat, Poppins } from "next/font/google";
-export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
-export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
+import { Container, MenuWrapper, UserInfo, UserName, UserStatus, Footer } from "./styles";
+
+import { poppins } from "../../fonts";
 
 export default function BarraEsquerda() {
   const [expanded, setExpanded] = useState(false);
-  const [user, setUser] = useState<BlogUser | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [userPostCount, setUserPostCount] = useState<number>(0);
+  const { user, token } = useUserData();
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    const loadUser = async () => {
-      const storedToken = localStorage.getItem("token");
-      setToken(storedToken);
+  const logout = () => {
+    localStorage.removeItem("token");
+  };
 
-      const data = await fetchUserData();
-      setUser(data);
+  const handleGoTo = (path: string) => {
+    if (path === "/Login") {
+      logout();
+    }
+    router.push(path);
+  };
+
+  useEffect(() => {
+    const fetchUserPostCount = async () => {
+      if (!user?.id) return;
+
+      const allPosts = await getAllPosts();
+      if (allPosts) {
+        const count = allPosts.filter((post) => post.author.id === user.id).length;
+        setUserPostCount(count);
+      }
     };
-    loadUser();
-  }, []);
+
+    fetchUserPostCount();
+  }, [user]);
 
   return (
     <div className={poppins.className}>
-      <Container
-        onMouseEnter={() => setExpanded(true)}
-        onMouseLeave={() => setExpanded(false)}
-        $expanded={expanded}
-      >
+      <Container onMouseEnter={() => setExpanded(true)} onMouseLeave={() => setExpanded(false)} $expanded={expanded}>
         <MenuWrapper>
           {expanded && user && (
             <UserInfo>
               <Image src="/Perfil.svg" alt="User" width={50} height={50} />
               <div>
                 <UserName>{user.name}</UserName>
-                {user && token ? (
-                  <UserStatus>🟢 Ativo</UserStatus>
+                {token ? (
+                  <UserStatus>
+                    🟢 Ativo{" "}
+                    <span style={{ color: "white" }}>
+                      &nbsp;•&nbsp; {userPostCount} post{userPostCount !== 1 ? "s" : ""}
+                    </span>
+                  </UserStatus>
                 ) : (
                   <UserStatus>🔴 Offline</UserStatus>
                 )}
@@ -61,36 +66,44 @@ export default function BarraEsquerda() {
             </UserInfo>
           )}
 
-          <MenuItem $selected={pathname === "/Home"} onClick={() => router.push("/Home")}>
-            <IconWrapper><i className="fas fa-home" /></IconWrapper>
-            {expanded && <IconLabel>Home</IconLabel>}
-          </MenuItem>
-
-          <MenuItem onClick={() => router.push("/Search")}>
-            <IconWrapper><i className="fas fa-search" /></IconWrapper>
-            {expanded && <IconLabel>Search</IconLabel>}
-          </MenuItem>
-
-          <MenuItem>
-            <IconWrapper><i className="fas fa-layer-group" /></IconWrapper>
-            {expanded && <IconLabel>Categories</IconLabel>}
-          </MenuItem>
-
-          <MenuItem $selected={pathname === "/User"} onClick={() => router.push("/User")}>
-            <IconWrapper><i className="fas fa-user" /></IconWrapper>
-            {expanded && <IconLabel>User</IconLabel>}
-          </MenuItem>
+          <MenuItemWithIcon
+            icon="fas fa-home"
+            label="Home"
+            expanded={expanded}
+            selected={pathname === "/Home"}
+            onClick={() => handleGoTo("/Home")}
+          />
+          <MenuItemWithIcon
+            icon="fas fa-search"
+            label="Search"
+            expanded={expanded}
+            onClick={() => handleGoTo("/Search")}
+          />
+          <MenuItemWithIcon
+            icon="fas fa-layer-group"
+            label="Categories"
+            expanded={expanded}
+            onClick={() => handleGoTo("/Categorias")}
+          />
+          <MenuItemWithIcon
+            icon="fas fa-user"
+            label="User"
+            expanded={expanded}
+            selected={pathname === "/User"}
+            onClick={() => handleGoTo("/User")}
+          />
+          <MenuItemWithIcon
+            icon="fas fa-right-from-bracket"
+            label="Logout"
+            expanded={expanded}
+            selected={pathname === "/Login"}
+            onClick={() => handleGoTo("/Login")}
+          />
         </MenuWrapper>
 
         <Footer>
-          <MenuItem>
-            <IconWrapper><i className="fas fa-cog" /></IconWrapper>
-            {expanded && <IconLabel>Settings</IconLabel>}
-          </MenuItem>
-          <MenuItem>
-            <IconWrapper><i className="fas fa-exclamation-circle" /></IconWrapper>
-            {expanded && <IconLabel>Support</IconLabel>}
-          </MenuItem>
+          <MenuItemWithIcon icon="fas fa-cog" label="Settings" expanded={expanded} onClick={() => {}} />
+          <MenuItemWithIcon icon="fas fa-exclamation-circle" label="Support" expanded={expanded} onClick={() => {}} />
         </Footer>
       </Container>
     </div>
