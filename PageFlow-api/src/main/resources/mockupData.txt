@@ -15,9 +15,9 @@ category;14;Saúde e Bem-estar
 category;15;Viagens
 category;16;Desenvolvimento Pessoal
 category;17;Uncategorized
-author;1;Otávio Fernandes;thiago64;fogacatheo@bol.com.br;a17)QeZ%2^;AUTHOR;Consectetur doloremque recusandae non quasi. Accusantium voluptatum deleniti porro autem corrupti. Incidunt dolore iste ea. Nulla doloremque earum.
-author;2;Theo Souza;zsantos;ana-julia46@pereira.br;Z+7IN$tjU+;AUTHOR;Tempore ipsa sequi velit provident. Officiis natus a ad tenetur sit repellendus. Ut enim porro quos quod.
-author;3;Juan Gonçalves;fernandesalexia;santosanthony@pires.net;0@4Jp3B2Y$;AUTHOR;Dignissimos quam ab recusandae.
+author;1;Otávio Fernandes;thiago64;fogacatheo@bol.com.br;fogacatheo;AUTHOR;Consectetur doloremque recusandae non quasi. Accusantium voluptatum deleniti porro autem corrupti. Incidunt dolore iste ea. Nulla doloremque earum.
+author;2;Theo Souza;zsantos;ana-julia46@pereira.br;ana-julia46;AUTHOR;Tempore ipsa sequi velit provident. Officiis natus a ad tenetur sit repellendus. Ut enim porro quos quod.
+author;3;Juan Gonçalves;fernandesalexia;santosanthony@pires.net;santosanthony;AUTHOR;Dignissimos quam ab recusandae.
 post;1;Blanditiis ea vel eligendi neque perferendis et.;Fuga incidunt ex quod eum. Commodi laudantium id odit non eveniet. Ut in ab omnis quas.;2;6;PUBLISHED
 post;2;Voluptatibus eos modi consequuntur.;Labore atque a sed quam facilis illum. Ab a quod delectus molestiae. Aliquam omnis quae eveniet culpa harum delectus.;3;1;DRAFT
 post;3;Cupiditate iure at aliquid dicta dolor adipisci.;Mollitia dolor ex. Explicabo atque doloribus beatae molestias doloremque. Eveniet quas eaque quas consectetur. Saepe quisquam odio eligendi totam. Facilis quae saepe velit sint fugiat.;3;5;DRAFT
