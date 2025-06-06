@@ -26,7 +26,6 @@ export function useLogin() {
       if (result.jwt) {
         setAuthToken(result.jwt);
         router.push("/Home");
-        alert("Login realizado com sucesso!");
       } else {
         throw new Error("Token ou ID não recebido do servidor.");
       }

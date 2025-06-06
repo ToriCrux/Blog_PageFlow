@@ -1,0 +1,60 @@
+category;1;Programação
+category;2;Inteligência Artificial
+category;3;Empreendedorismo
+category;4;Marketing Digital
+category;5;Finanças Pessoais
+category;6;Produtividade
+category;7;Carreira & Emprego
+category;8;Startups
+category;9;Design Gráfico
+category;10;Branding
+category;11;Criatividade
+category;12;Tutoriais
+category;13;Curiosidades
+category;14;Saúde e Bem-estar
+category;15;Viagens
+category;16;Desenvolvimento Pessoal
+category;17;Uncategorized
+author;1;Otávio Fernandes;thiago64;fogacatheo@bol.com.br;fogacatheo;AUTHOR;Consectetur doloremque recusandae non quasi. Accusantium voluptatum deleniti porro autem corrupti. Incidunt dolore iste ea. Nulla doloremque earum.
+author;2;Theo Souza;zsantos;ana-julia46@pereira.br;ana-julia46;AUTHOR;Tempore ipsa sequi velit provident. Officiis natus a ad tenetur sit repellendus. Ut enim porro quos quod.
+author;3;Juan Gonçalves;fernandesalexia;santosanthony@pires.net;santosanthony;AUTHOR;Dignissimos quam ab recusandae.
+post;1;Blanditiis ea vel eligendi neque perferendis et.;Fuga incidunt ex quod eum. Commodi laudantium id odit non eveniet. Ut in ab omnis quas.;2;6;PUBLISHED
+post;2;Voluptatibus eos modi consequuntur.;Labore atque a sed quam facilis illum. Ab a quod delectus molestiae. Aliquam omnis quae eveniet culpa harum delectus.;3;1;DRAFT
+post;3;Cupiditate iure at aliquid dicta dolor adipisci.;Mollitia dolor ex. Explicabo atque doloribus beatae molestias doloremque. Eveniet quas eaque quas consectetur. Saepe quisquam odio eligendi totam. Facilis quae saepe velit sint fugiat.;3;5;DRAFT
+post;4;Eveniet numquam aliquam vero quasi pariatur tempora.;Omnis repudiandae voluptatem ipsam quo. Laudantium maxime quod eaque placeat. Totam eius doloribus iste totam consectetur.;2;6;PUBLISHED
+post;5;Ad et cumque.;Porro et mollitia possimus vitae velit. Natus labore earum aperiam.;1;1;PUBLISHED
+post;6;Quia rerum a iusto ipsam expedita.;Inventore deserunt ipsa porro fugit cumque. Illo magni quo magni nesciunt a perspiciatis vitae. Necessitatibus ipsa dolores facere numquam quos. Reiciendis aperiam omnis dolores iusto vitae ex.;1;2;DRAFT
+post;7;Aut mollitia necessitatibus enim omnis neque dolorum.;Excepturi error quis architecto ad. Delectus sit ipsam consectetur dignissimos sit veniam fugit. Ratione tempore voluptatibus accusamus voluptatum.;3;4;PUBLISHED
+post;8;Quasi delectus sunt dignissimos iste ratione.;Cupiditate labore repellat nobis repellat expedita. Perspiciatis architecto consequatur eaque facilis aspernatur at. Reiciendis quia excepturi dolorum libero. Totam quam quasi corporis delectus.;1;5;DRAFT
+post;9;Eligendi eum eligendi facilis aspernatur dolores molestiae.;Voluptatem dolorem commodi iusto harum deserunt ipsam. Explicabo veniam repellat iusto quibusdam qui eveniet. Perferendis magni doloremque reprehenderit provident veniam iusto.;2;6;PUBLISHED
+post;10;Voluptatem vero in tempore quo.;Consectetur enim totam. Unde sunt sequi unde. Explicabo dolorum rem accusamus voluptas dicta. Corporis cum labore in iste. Ad maiores incidunt vero cumque et quo.;1;5;PUBLISHED
+comment;1;Mollitia dolore nulla nemo nesciunt ut alias ipsum inventore libero dolores ea vitae dolorem fugiat.;true
+comment;2;Rem aperiam non placeat totam illum ipsa repellendus mollitia deserunt cum ex.;true
+comment;3;A eaque velit blanditiis magnam beatae ea amet aperiam quam quo.;true
+comment;4;Ducimus nobis fugit vitae minima sint distinctio corporis error omnis delectus aut provident repellat voluptatum minima.;true
+comment;5;Necessitatibus aliquam porro occaecati nesciunt tempore officiis vero deleniti animi rerum nemo molestias.;true
+comment;6;Aliquid quibusdam in tenetur suscipit minus hic velit amet repellat vitae laboriosam cumque consequatur minus.;true
+comment;7;Nemo deserunt ipsam quis repudiandae ullam odit fugiat veritatis repellat maxime voluptates.;true
+comment;8;Hic accusantium quidem nihil perferendis illum cumque aliquid doloribus iure.;true
+comment;9;Fugit sed dolorem eaque placeat deleniti quidem provident ab cumque est eveniet dolorum quos.;true
+comment;10;Eum quam quas eligendi sequi libero vitae doloribus cupiditate sapiente quaerat temporibus ad facilis.;true
+comment;11;Quia sit fugiat fuga unde esse molestias facere.;true
+comment;12;Optio saepe amet accusamus sapiente perferendis nam veniam iusto possimus vitae animi assumenda.;true
+comment;13;Iusto sit eos voluptatem ipsum delectus debitis.;true
+comment;14;Non fugiat delectus est facere repudiandae delectus deserunt.;true
+comment;15;Rem adipisci est dolor beatae laudantium expedita nemo amet nemo delectus tenetur commodi.;true
+postcommentrelation;1;1;1
+postcommentrelation;2;2;2
+postcommentrelation;3;3;3
+postcommentrelation;4;4;4
+postcommentrelation;5;5;5
+postcommentrelation;6;6;6
+postcommentrelation;8;7;7
+postcommentrelation;9;8;8
+postcommentrelation;10;9;9
+postcommentrelation;11;10;10
+postcommentrelation;12;1;11
+postcommentrelation;13;2;12
+postcommentrelation;14;3;13
+postcommentrelation;15;4;14
+postcommentrelation;16;5;15

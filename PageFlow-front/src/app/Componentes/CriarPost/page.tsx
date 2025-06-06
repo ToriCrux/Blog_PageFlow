@@ -1,19 +1,11 @@
-'use client';
+"use client";
 
-import {
-  PostContainer,
-  Divider,
-  ActionsRow,
-  ActionButton,
-  SendButton,
-} from "./styles";
-
+import { PostContainer, Divider, ActionsRow, ActionButton, SendButton, ToggleCheckbox } from "./styles";
 
 import { useCriarPost } from "./useCriarPost";
 import TinyEditorWrapper from "./TinyEditorWrapper";
 
 import { poppins } from "../../fonts";
-
 
 export default function CriarPost() {
   const {
@@ -24,6 +16,8 @@ export default function CriarPost() {
     categorias,
     selectedCategoria,
     setSelectedCategoria,
+    isDraft,
+    setIsDraft,
     handleSend,
   } = useCriarPost();
 
@@ -70,6 +64,10 @@ export default function CriarPost() {
 
         <ActionsRow>
           <div className="flex gap-2">
+            <ToggleCheckbox $checked={isDraft} onClick={() => setIsDraft(!isDraft)}>
+              <i className="fa-solid fa-pencil mr-2"></i>
+              {isDraft ? "Rascunho Ativo" : "Marcar como Rascunho"}
+            </ToggleCheckbox>
             <ActionButton>
               <i className="fas fa-image mr-2" />
               Pictures

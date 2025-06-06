@@ -1,10 +1,13 @@
 package br.edu.infnet.pageflow.dto;
 
+import br.edu.infnet.pageflow.utils.PostStatus;
+
 public class PostRequest {
     private String title;
     private String content;
     private Integer authorId;
     private Integer categoryId;
+    private PostStatus status;
 
     public String getTitle() {
         return title;
@@ -36,5 +39,13 @@ public class PostRequest {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public PostStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PostStatus status) {
+        this.status = status;
     }
 }

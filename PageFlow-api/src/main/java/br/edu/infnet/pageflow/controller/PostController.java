@@ -3,18 +3,23 @@ package br.edu.infnet.pageflow.controller;
 import br.edu.infnet.pageflow.dto.CommentRequest;
 import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.dto.PostResponse;
+import br.edu.infnet.pageflow.entities.BlogUser;
 import br.edu.infnet.pageflow.entities.Comment;
 import br.edu.infnet.pageflow.entities.Post;
 import br.edu.infnet.pageflow.repository.PostCommentRelationRepository;
 import br.edu.infnet.pageflow.service.CommentService;
 import br.edu.infnet.pageflow.service.PostService;
+import br.edu.infnet.pageflow.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -26,11 +31,21 @@ public class PostController {
     private CommentService commentService;
     @Autowired
     private PostCommentRelationRepository postCommentRelationRepository;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<Collection<Post>> getAllPosts() {
         return ResponseEntity.ok(postService.getPosts());
     }
+
+    @GetMapping("/draft")
+    public ResponseEntity<Optional<Post>> getDraftPost(Principal principal) {
+        String email = principal.getName();
+        BlogUser user = userService.getUserByEmail(email);
+        return ResponseEntity.ok(postService.getDraftPost(user.getId()));
+    }
+
 
     @PostMapping("/new")
     public ResponseEntity<Post> createPost(@RequestBody PostRequest postRequest) {
