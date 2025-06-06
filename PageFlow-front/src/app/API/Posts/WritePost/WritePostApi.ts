@@ -3,12 +3,11 @@ const API_BASE_URL = "http://localhost:8080";
 interface CreatePostPayload {
   title: string;
   content: string;
-  categoryId: number; 
+  categoryId: number;
+  status: "DRAFT" | "PUBLISHED";
 }
 
-export const createPost = async (
-  payload: CreatePostPayload
-): Promise<unknown | null> => {
+export const createPost = async (payload: CreatePostPayload): Promise<unknown | null> => {
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -35,7 +34,8 @@ export const createPost = async (
         title: payload.title,
         content: payload.content,
         authorId: authorId,
-        categoryId: 1, // 🔒 FIXO como no Postman
+        categoryId: payload.categoryId,
+        status: payload.status,
       }),
     });
 

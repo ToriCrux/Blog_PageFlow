@@ -8,6 +8,7 @@ import { getAllCategories, CategoriaData } from "../../API/Categorias/PostCatego
 export function useCriarPost() {
   const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
+  const [isDraft, setIsDraft] = useState(false);
   const [categorias, setCategorias] = useState<CategoriaData[]>([]);
   const [selectedCategoria, setSelectedCategoria] = useState<number | null>(null);
 
@@ -27,6 +28,7 @@ export function useCriarPost() {
       title,
       content: post,
       categoryId: selectedCategoria,
+      status: isDraft ? "DRAFT" : "PUBLISHED",
     });
 
     if (response) {
@@ -45,6 +47,8 @@ export function useCriarPost() {
   return {
     title,
     setTitle,
+    isDraft,
+    setIsDraft,
     post,
     setPost,
     categorias,
