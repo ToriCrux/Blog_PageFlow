@@ -37,10 +37,23 @@ export default function Login() {
     <Container>
       <LeftSection>
         <LoginImage>
-          <Image src="/Login.svg" alt="Login Illustration" width={600} height={600} style={{ width: "100%", height: "auto" }} priority />
+          <Image
+            src="/Login.svg"
+            alt="Login Illustration"
+            width={600}
+            height={600}
+            style={{ width: "100%", height: "auto" }}
+            priority
+          />
         </LoginImage>
         <LogoContainer>
-          <Image src="/Logo.svg" alt="Page Flow Logo" width={600} height={50} style={{ width: "100%", height: "auto" }} />
+          <Image
+            src="/Logo.svg"
+            alt="Page Flow Logo"
+            width={600}
+            height={50}
+            style={{ width: "100%", height: "auto" }}
+          />
         </LogoContainer>
         <Phrase>Escreva. Compartilhe. Conecte-se.</Phrase>
       </LeftSection>
@@ -71,14 +84,24 @@ export default function Login() {
         <InputGroup>
           <label className="text-xl">Email address</label>
           <InputContainer>
-            <InputIcon>📩</InputIcon>
+            <InputIcon>
+              <i className="fa-solid fa-envelope"></i>
+            </InputIcon>
             <InputField type="email" name="email" placeholder="Email ..." value={form.email} onChange={handleChange} />
           </InputContainer>
 
           <label className="text-xl mt-4">Password</label>
           <InputContainer>
-            <InputIcon>🔒</InputIcon>
-            <InputField type="password" name="password" placeholder="Password ..." value={form.password} onChange={handleChange} />
+            <InputIcon>
+              <i className="fa-solid fa-lock"></i>
+            </InputIcon>
+            <InputField
+              type="password"
+              name="password"
+              placeholder="Password ..."
+              value={form.password}
+              onChange={handleChange}
+            />
           </InputContainer>
 
           <SignInButton onClick={handleSubmit}>Sign In</SignInButton>
