@@ -27,6 +27,7 @@ export interface PostData {
       updatedAt: string;
     }
   ];
+  status: string;
 }
 
 export const getAllPosts = async (): Promise<PostData[] | null> => {
