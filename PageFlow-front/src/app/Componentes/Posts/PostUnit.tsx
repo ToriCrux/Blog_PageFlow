@@ -19,6 +19,7 @@ import {
 import { useState, ChangeEvent } from "react";
 import { poppins } from "../../fonts";
 import { PostData } from "@/app/API/Posts/GetPosts/GetPostsAPI";
+import { ToggleCheckbox } from "../CriarPost/styles";
 
 type Props = {
   post: PostData;
@@ -88,8 +89,12 @@ export default function PostUnit({
 
           {post.author.id === userId && (
             <>
-              <EditIcon onClick={() => handleEdit(post)}>✎</EditIcon>
-              <DeleteIcon onClick={() => handleDelete(post.id)}>✖</DeleteIcon>
+              <EditIcon onClick={() => handleEdit(post)}>
+                <i className="fa-solid fa-pen-to-square"></i>
+              </EditIcon>
+              <DeleteIcon onClick={() => handleDelete(post.id)}>
+                <i className="fa-solid fa-trash"></i>
+              </DeleteIcon>
             </>
           )}
         </PostHeader>
@@ -112,8 +117,15 @@ export default function PostUnit({
               className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 font-semibold"
               onClick={() => toggleComments(post.id)}
             >
-              💬 {post.comments?.length ?? 0} comentário{(post.comments?.length !== 1 ? "s" : "")}
-              <span>{visibleComments[post.id] ? "🔼" : "🔽"}</span>
+              <i className="fas fa-solid fa-comment mr-2" />
+              {post.comments?.length ?? 0} comentário{post.comments?.length !== 1 ? "s" : ""}
+              <span>
+                {visibleComments[post.id] ? (
+                  <i className="fas fa-solid fa-square-caret-up ml-2"></i>
+                ) : (
+                  <i className="fas fa-solid fa-square-caret-down ml-2"></i>
+                )}
+              </span>
             </div>
 
             {visibleComments[post.id] && (
@@ -133,14 +145,22 @@ export default function PostUnit({
             </SendEditIcon>
           ) : (
             <>
-              <CommentBox
+              {/* <CommentBox
                 placeholder="Write a comment..."
                 value={commentInput[post.id] || ""}
-                onChange={handleCommentChange}
+                onChange={(e) =>
+                  setCommentInput((prev) => ({
+                    ...prev,
+                    [post.id]: e.target.value,
+                  }))
+                }
               />
               <SendEditIcon onClick={() => handleCommentSubmit(post.id)}>
                 <i className="fas fa-paper-plane" />
-              </SendEditIcon>
+              </SendEditIcon> */}
+              <ToggleCheckbox $checked={post.status === "DRAFT"}>
+                {post.status === "DRAFT" ? "Rascunho Ativo" : "Marcar como Rascunho"}
+              </ToggleCheckbox>
             </>
           )}
         </PostFooter>
