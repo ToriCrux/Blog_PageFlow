@@ -1,0 +1,19 @@
+name: PageFlow CI
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build-test-backend:
+    name: "Build & Test Backend"
+    uses: "./.github/workflows/backend-ci.yml"
+
+  build-test-frontend:
+    name: "Build & Test Frontend"
+    uses: "./.github/workflows/frontend-ci.yml"
