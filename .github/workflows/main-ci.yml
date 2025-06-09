@@ -13,6 +13,8 @@ jobs:
   build-test-backend:
     name: "Build & Test Backend"
     uses: "./.github/workflows/backend-ci.yml"
+    permissions:
+      contents: write
 
   build-test-frontend:
     name: "Build & Test Frontend"
