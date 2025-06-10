@@ -38,7 +38,7 @@ jobs:
         with:
           jacoco-csv-file: PageFlow-api/target/site/jacoco/jacoco.csv
           generate-branches-badge: true
-          badges-directory: .github/badges
+          badges-directory: PageFlow-api/.github/badges
 
       - name: Fazer commit do selo (se houver mudança)
         run: |
