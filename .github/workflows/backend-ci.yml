@@ -21,7 +21,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and test
-        run: mvn -B package
+        run: mvn clean verify
         working-directory: ./PageFlow-api
 
       - name: Gerar selo (badge) do JaCoCo
