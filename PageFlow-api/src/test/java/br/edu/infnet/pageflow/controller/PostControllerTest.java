@@ -5,12 +5,13 @@ import br.edu.infnet.pageflow.dto.PostRequest;
 import br.edu.infnet.pageflow.entities.Author;
 import br.edu.infnet.pageflow.entities.Category;
 import br.edu.infnet.pageflow.entities.Post;
+import br.edu.infnet.pageflow.repository.*;
 import br.edu.infnet.pageflow.security.jwt.JwtUtil;
 import br.edu.infnet.pageflow.service.AuthUserDetailsService;
+import br.edu.infnet.pageflow.service.CommentService;
 import br.edu.infnet.pageflow.service.PostService;
+import br.edu.infnet.pageflow.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
@@ -34,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = PostController.class)
 @Import(TestSecurityConfig.class)
-@ExtendWith(MockitoExtension.class)
 class PostControllerTest {
 
     @Autowired
@@ -44,13 +44,40 @@ class PostControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private AuthUserDetailsService authUserDetailsService;
-
-    @MockBean
     private JwtUtil jwtUtil;
 
     @MockBean
+    private AuthUserDetailsService authUserDetailsService;
+
+    @MockBean
     private PostService postService;
+
+    @MockBean
+    private CommentService commentService;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private PostRepository postRepository;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private  CategoryRepository categoryRepository;
+
+    @MockBean
+    private TagRepository tagRepository;
+
+    @MockBean
+    private PostTagRelationRepository postTagRelationRepository;
+
+    @MockBean
+    private CommentRepository commentRepository;
+
+    @MockBean
+    private PostCommentRelationRepository postCommentRelationRepository;
 
     @Test
     void testGetAllPosts() throws Exception {
