@@ -17,5 +17,6 @@ jobs:
       contents: write
 
   build-test-frontend:
+    needs: build-test-backend
     name: "Build & Test Frontend"
     uses: "./.github/workflows/frontend-ci.yml"

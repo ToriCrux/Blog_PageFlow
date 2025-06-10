@@ -20,8 +20,16 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build and test
-        run: mvn -B package
+      - name: Clear Maven Cache
+        run: rm -rf ~/.m2/repository
+        working-directory: ./PageFlow-api
+        
+      - name: Install Dependencies
+        run: mvn dependency:purge-local-repository clean install
+        working-directory: ./PageFlow-api
+        
+      - name: Run Tests
+        run: mvn test -X
         working-directory: ./PageFlow-api
 
       - name: Gerar selo (badge) do JaCoCo
