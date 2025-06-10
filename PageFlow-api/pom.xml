@@ -150,17 +150,18 @@
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>prepare-package</phase>
+						<phase>verify</phase> <!-- alterado de prepare-package para verify -->
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+							<formats>
+								<format>CSV</format>
+							</formats>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<formats>
-						<format>CSV</format>
-					</formats>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
