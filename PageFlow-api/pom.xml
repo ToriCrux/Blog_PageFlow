@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>5.15.2</version>
+			<version>5.14.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -162,7 +162,7 @@
 				<configuration>
 					<argLine>
 						-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
-						-Xshare:off
+						-Share:off
 					</argLine>
 				</configuration>
 			</plugin>
