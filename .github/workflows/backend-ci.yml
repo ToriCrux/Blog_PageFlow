@@ -20,9 +20,14 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build and test
-        run: mvn clean verify
-        working-directory: ./PageFlow-api
+      - name: Clear Maven Cache
+        run: rm -rf ~/.m2/repository
+        
+      - name: Install Dependencies
+        run: mvn dependency:purge-local-repository clean install
+        
+      - name: Run Tests
+        run: mvn test -X
 
       - name: Gerar selo (badge) do JaCoCo
         uses: cicirello/jacoco-badge-generator@v2
