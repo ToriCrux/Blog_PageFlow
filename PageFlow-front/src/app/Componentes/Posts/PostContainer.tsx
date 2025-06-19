@@ -8,7 +8,7 @@ import {
   PostBody,
   PostFooter,
   AuthorImage,
-  PostTitle,
+  PostTitle, 
   PostContent,
   CommentBox,
   DeleteIcon,
@@ -110,7 +110,7 @@ export default function PostContainer({ searchTerm }: PostContainerProps) {
                   <PostContent dangerouslySetInnerHTML={{ __html: purifier.sanitize(post.content) }} />
                 </>
               )}
-
+            
               <div className="mt-4">
                 <div
                   className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 font-semibold hover:text-blue-600"
@@ -126,16 +126,29 @@ export default function PostContainer({ searchTerm }: PostContainerProps) {
                     )}
                   </span>
                 </div>
-
+                  
                 {visibleComments[post.id] && (
-                  <ul className="text-sm text-gray-800 pl-4 list-disc mt-1">
-                    {(post.comments ?? []).map((comment, index) => (
-                      <li key={index}>{comment.content}</li>
-                    ))}
-                  </ul>
+                  <>
+                    <div className="w-full h-[2px] bg-[#9C0D38] my-2 rounded" />
+                
+                    <div className="mt-2 space-y-3">
+                      {(post.comments ?? []).map((comment, index) => (
+                        <div
+                          key={index}
+                          className="bg-white p-3 rounded-md shadow-sm text-sm text-gray-800"
+                        >
+                          <div className="flex items-center gap-3 mb-1">
+                            <div className="w-6 h-6 rounded-full bg-gray-400" />
+                            {comment.content}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
             </PostBody>
+
 
             <PostFooter className="flex justify-between items-center mt-4">
               {editingPostId === post.id ? (

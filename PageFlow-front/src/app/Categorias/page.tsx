@@ -50,7 +50,7 @@ export default function Categorias() {
 
       <main className="pt-20 pl-20 pr-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-bold mb-6">Categorias</h1>
+        <h1 className="text-2xl font-bold mb-6 font-poppins">Categorias</h1>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {categorias.map((categoria) => (
               <CategoriaCard
