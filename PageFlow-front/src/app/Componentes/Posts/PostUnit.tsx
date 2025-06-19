@@ -93,7 +93,7 @@ export default function PostUnit({
           ) : (
             <>
               <PostTitle>{post.title}</PostTitle>
-              <PostContent>{post.content}</PostContent>
+              <PostContent dangerouslySetInnerHTML={{ __html: post.content }} />
             </>
           )}
 
@@ -114,11 +114,23 @@ export default function PostUnit({
             </div>
 
             {visibleComments[post.id] && (
-              <ul className="text-sm text-gray-800 pl-4 list-disc mt-1">
-                {(post.comments ?? []).map((comment, index) => (
-                  <li key={index}>{comment.content}</li>
-                ))}
-              </ul>
+              <>
+                <div className="w-full h-[2px] bg-[#9C0D38] my-2 rounded" />
+
+                <div className="mt-2 space-y-3">
+                  {(post.comments ?? []).map((comment, index) => (
+                    <div
+                      key={index}
+                      className="bg-white p-3 rounded-md shadow-sm text-sm text-gray-800"
+                    >
+                      <div className="flex items-center gap-3 mb-1">
+                        <div className="w-6 h-6 rounded-full bg-gray-400" />
+                        {comment.content}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </PostBody>
@@ -129,24 +141,9 @@ export default function PostUnit({
               <i className="fas fa-paper-plane" />
             </SendEditIcon>
           ) : (
-            <>
-              {/* <CommentBox
-                placeholder="Write a comment..."
-                value={commentInput[post.id] || ""}
-                onChange={(e) =>
-                  setCommentInput((prev) => ({
-                    ...prev,
-                    [post.id]: e.target.value,
-                  }))
-                }
-              />
-              <SendEditIcon onClick={() => handleCommentSubmit(post.id)}>
-                <i className="fas fa-paper-plane" />
-              </SendEditIcon> */}
-              <ToggleCheckbox $checked={post.status === "DRAFT"}>
-                {post.status === "DRAFT" ? "Rascunho Ativo" : "Marcar como Rascunho"}
-              </ToggleCheckbox>
-            </>
+            <ToggleCheckbox $checked={post.status === "DRAFT"}>
+              {post.status === "DRAFT" ? "Rascunho Ativo" : "Marcar como Rascunho"}
+            </ToggleCheckbox>
           )}
         </PostFooter>
       </PostWrapper>

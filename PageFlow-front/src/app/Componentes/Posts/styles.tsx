@@ -52,6 +52,15 @@ export const PostFooter = tw.div`
   gap-2
 `;
 
+export const CommentBubble = tw.div`
+  bg-white
+  p-3
+  rounded-md
+  shadow-sm
+  text-sm
+  text-gray-800
+`;
+
 export const CommentBox = tw.input`
   flex-1
   rounded-md

@@ -16,4 +16,5 @@ export const CategoriaCard = tw.div`
   transition
   duration-300
   cursor-pointer
+  font-poppins
 `;

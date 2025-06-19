@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Head from "next/head";
-import { Suspense } from "react"; // ✅ IMPORTANTE
+import { Suspense } from "react"; 
 
 import NavBar from "../Componentes/NavBar/page";
 import BarraEsquerda from "../Componentes/BarraEsquerda/page";

@@ -37,7 +37,6 @@ export const fetchUserData = async (): Promise<BlogUser | null> => {
   }
 };
 
-// 🔍 Função para decodificar o token JWT
 function parseJwt(token: string) {
   try {
     const base64Url = token.split(".")[1];

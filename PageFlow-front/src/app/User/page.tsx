@@ -1,5 +1,6 @@
 'use client';
 
+import { poppins } from "@/app/fonts";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import BarraEsquerda from "../Componentes/BarraEsquerda/page";
@@ -9,8 +10,6 @@ import { BlogUser, fetchUserData } from "@/app/API/UserAPI/ApiUserData";
 
 import { usePostContainer } from "../Componentes/Posts/usePostContainer";
 import PostUnit from "../Componentes/Posts/PostUnit";
-
-
 
 export default function User() {
   const [user, setUser] = useState<BlogUser | null>(null);
@@ -29,14 +28,8 @@ export default function User() {
       <BarraEsquerda />
 
       <BarraSuperior>
-        <div className="relative h-full" style={{ marginLeft: '15%' }}>
-          <div
-            className="absolute"
-            style={{
-              top: '100%',
-              transform: 'translateY(-50%)',
-            }}
-          >
+      <div className="relative h-full ml-[15%]">
+        <div className="absolute top-full translate-y-[-50%]">
             <Image
               src="/Img_User_Page.svg"
               alt="Usuário"
@@ -55,17 +48,17 @@ export default function User() {
 
       <main className="pt-20 pl-20 pr-4">
         <div className="max-w-2xl mx-auto">
-          <UserPostsOnly />
+          {/* Renderiza somente se o user estiver carregado */}
+          {user && <UserPostsOnly userId={String(user.id)} />}
         </div>
       </main>
     </>
   );
 }
 
-function UserPostsOnly() {
+function UserPostsOnly({ userId }: { userId: string }) {
   const {
     posts,
-    userId,
     editingPostId,
     editedTitle,
     editedContent,
@@ -79,12 +72,15 @@ function UserPostsOnly() {
     handleCommentSubmit,
   } = usePostContainer();
 
-  if (!userId) return <p>Carregando posts do usuário...</p>;
+  const myPosts = posts.filter((post) => post.author.id === Number(userId));
 
-  const myPosts = posts.filter((post) => post.author.id === userId);
 
   if (myPosts.length === 0) {
-    return <p className="text-center mt-8 text-gray-600">Você ainda não publicou nenhum post.</p>;
+    return (
+      <p className={`${poppins.className} text-center mt-8 text-[#9C0D38]`}>
+        Você ainda não publicou nenhum post.
+      </p>
+    );
   }
 
   return (
@@ -93,7 +89,7 @@ function UserPostsOnly() {
         <PostUnit
           key={post.id}
           post={post}
-          userId={userId}
+          userId={Number(userId)} 
           editingPostId={editingPostId}
           editedTitle={editedTitle}
           editedContent={editedContent}
