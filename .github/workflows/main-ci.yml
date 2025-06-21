@@ -29,4 +29,4 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
       - name: Build and start services with Docker Compose
-        run: docker-compose up --build -d
+        run: docker compose up --build -d
