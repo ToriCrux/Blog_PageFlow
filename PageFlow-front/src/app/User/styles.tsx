@@ -7,4 +7,5 @@ export const BarraSuperior = tw.div`
   mt-16          
   flex
   items-end
+  font-poppins
 `;

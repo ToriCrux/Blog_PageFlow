@@ -49,6 +49,7 @@ export default function CriarPost() {
         />
 
         <select
+          aria-label="Selecionar categoria"
           value={selectedCategoria ?? ""}
           onChange={(e) => setSelectedCategoria(Number(e.target.value))}
           className="w-full mt-4 mb-2 p-2 rounded bg-white text-gray-800 border border-gray-300"

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { Container, LogoArea, IconGroup, IconButton } from "./styles";
+import { Container, LogoArea, IconGroup } from "./styles";
 
 import { poppins } from "../../fonts";
 
@@ -23,12 +23,12 @@ export default function NavBar() {
 
 
         <IconGroup>
-          <IconButton>
+          {/* <IconButton>
             <i className="fas fa-bell" />
-          </IconButton>
-          <IconButton>
+          </IconButton>*/}
+          {/* <IconButton>
             <i className="fas fa-moon" />
-          </IconButton>
+          </IconButton>*/}
         </IconGroup>
       </Container>
     </div>

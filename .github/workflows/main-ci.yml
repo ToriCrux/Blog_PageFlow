@@ -1,0 +1,32 @@
+name: Main CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  build-test-backend:
+    name: "Build & Test Backend"
+    uses: "./.github/workflows/backend-ci.yml"
+    permissions:
+      contents: write
+
+  build-test-frontend:
+    needs: build-test-backend
+    name: "Build & Test Frontend"
+    uses: "./.github/workflows/frontend-ci.yml"
+
+  build-and-run-compose:
+    name: Build Images and Run Compose
+    needs: [build-test-backend, build-test-frontend]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      - name: Build and start services with Docker Compose
+        run: docker compose up --build -d

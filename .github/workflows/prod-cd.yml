@@ -1,0 +1,103 @@
+name: PageFlow CD - Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-backend:
+    name: Build & Push Backend Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./PageFlow-api
+          file: ./PageFlow-api/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/pageflow-api:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/pageflow-api:latest
+
+  build-push-frontend:
+    name: Build & Push Frontend Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./PageFlow-front
+          file: ./PageFlow-front/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/pageflow-front:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/pageflow-front:latest
+
+  deploy-to-kubernetes:
+    name: Deploy to Kubernetes
+    needs: [build-push-backend, build-push-frontend]
+    runs-on: ubuntu-latest
+    
+    environment: production
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Set up Kubeconfig
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+
+      - name: Create or Update DB Secret
+        run: |
+          kubectl create secret generic db-secret \
+            --from-literal=POSTGRES_USER='${{ secrets.DB_USER }}' \
+            --from-literal=POSTGRES_PASSWORD='${{ secrets.DB_PASSWORD }}' \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Substituir Image Tag nos manifestos
+        run: |
+          TAG=${{ github.sha }}
+          sed -i "s|image:.*pageflow-api.*|image: ghcr.io/${{ github.repository_owner }}/pageflow-api:$TAG|g" k8s/api-deployment.yml
+          sed -i "s|image:.*pageflow-front.*|image: ghcr.io/${{ github.repository_owner }}/pageflow-front:$TAG|g" k8s/front-deployment.yml
+          
+      - name: Aplicar manifestos no Cluster
+        run: kubectl apply -f k8s/
+
+      - name: Verificar status do deploy
+        run: |
+          echo "Aguardando o deploy da API..."
+          kubectl rollout status deployment/pageflow-api-deployment
+          echo "Aguardando o deploy do Frontend..."
+          kubectl rollout status deployment/pageflow-front-deployment
+          echo "Deploy concluído com sucesso!"

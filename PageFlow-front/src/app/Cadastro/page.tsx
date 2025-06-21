@@ -61,16 +61,16 @@ export default function Cadastro() {
       <RightSection>
         <SignInContainer>
           <TitleGroup>
-            <Title>Create your account</Title>
-            <Subtitle>Let’s get start!</Subtitle>
+            <Title>Crie sua conta</Title>
+            <Subtitle>Vamos começar!</Subtitle>
           </TitleGroup>
 
           <ButtonGroup>
             <Button className="google">
-              <i className="fab fa-google mr-2"></i> Continue with Google
+              <i className="fab fa-google mr-2"></i> Continue com Google
             </Button>
             <Button className="facebook">
-              <i className="fab fa-facebook-f mr-2"></i> Continue with Facebook
+              <i className="fab fa-facebook-f mr-2"></i> Continue com Facebook
             </Button>
           </ButtonGroup>
 
@@ -82,31 +82,31 @@ export default function Cadastro() {
         </SignInContainer>
         
         <InputGroup>
-          <label className="text-xl">Name</label>
+          <label className="text-xl">Nome de usuário</label>
           <InputContainer>
             <InputIcon>👤</InputIcon>
             <InputField 
               type="text" 
               name="name" 
-              placeholder="Name ..."
+              placeholder="Nome de usuário ..."
               value={form.name}
               onChange={handleChange}
             />
           </InputContainer>
 
-          <label className="text-xl mt-4">Username</label>
+          <label className="text-xl mt-4">Nome Completo</label>
           <InputContainer>
             <InputIcon>👥</InputIcon>
             <InputField 
               type="text" 
               name="username" 
-              placeholder="Username ..."
+              placeholder="Nome completo ..."
               value={form.username}
               onChange={handleChange}
             />
           </InputContainer>
 
-          <label className="text-xl mt-4">Email address</label>
+          <label className="text-xl mt-4">Email</label>
           <InputContainer>
             <InputIcon>📩</InputIcon>
             <InputField 
@@ -118,14 +118,14 @@ export default function Cadastro() {
             />
           </InputContainer>
 
-          <label className="text-xl mt-4">Password</label>
+          <label className="text-xl mt-4">Senha</label>
           <div className="flex flex-col xl:flex-row gap-4 w-full">
             <InputContainer className="w-full xl:w-1/2">
               <InputIcon>🔒</InputIcon>
               <InputField 
                 type="password" 
                 name="password" 
-                placeholder="Password ..."
+                placeholder="Senha ..."
                 value={form.password}
                 onChange={handleChange}
               />
@@ -136,19 +136,19 @@ export default function Cadastro() {
               <InputField 
                 type="password" 
                 name="confirmPassword" 
-                placeholder="Confirm Password ..."
+                placeholder="Confirme sua senha ..."
                 value={form.confirmPassword}
                 onChange={handleChange}
               />
             </InputContainer>
           </div>
 
-          <SignInButton onClick={handleSubmit}>Sign Up</SignInButton>
+          <SignInButton onClick={handleSubmit}>Cadastrar</SignInButton>
 
           <RegisterText>
-            Already have an account? 
+            Você já possui uma conta? 
             <Link href="/Login">
-              <span className="text-blue-900"> Login in</span>
+              <span className="text-blue-900">Acessar</span>
             </Link>
           </RegisterText>
         </InputGroup>

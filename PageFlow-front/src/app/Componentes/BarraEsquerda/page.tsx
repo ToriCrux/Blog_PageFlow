@@ -55,7 +55,7 @@ export default function BarraEsquerda() {
                 {token ? (
                   <UserStatus>
                     🟢 Ativo{" "}
-                    <span style={{ color: "white" }}>
+                    <span className="text-white">
                       &nbsp;•&nbsp; {userPostCount} post{userPostCount !== 1 ? "s" : ""}
                     </span>
                   </UserStatus>
@@ -73,28 +73,28 @@ export default function BarraEsquerda() {
             selected={pathname === "/Home"}
             onClick={() => handleGoTo("/Home")}
           />
-          <MenuItemWithIcon
+          {/* <MenuItemWithIcon
             icon="fas fa-search"
             label="Search"
             expanded={expanded}
             onClick={() => handleGoTo("/Search")}
-          />
+          />*/}
           <MenuItemWithIcon
             icon="fas fa-layer-group"
-            label="Categories"
+            label="Categorias"
             expanded={expanded}
             onClick={() => handleGoTo("/Categorias")}
           />
           <MenuItemWithIcon
             icon="fas fa-user"
-            label="User"
+            label="Usuário"
             expanded={expanded}
             selected={pathname === "/User"}
             onClick={() => handleGoTo("/User")}
           />
           <MenuItemWithIcon
             icon="fas fa-right-from-bracket"
-            label="Logout"
+            label="Sair"
             expanded={expanded}
             selected={pathname === "/Login"}
             onClick={() => handleGoTo("/Login")}
@@ -102,8 +102,8 @@ export default function BarraEsquerda() {
         </MenuWrapper>
 
         <Footer>
-          <MenuItemWithIcon icon="fas fa-cog" label="Settings" expanded={expanded} onClick={() => {}} />
-          <MenuItemWithIcon icon="fas fa-exclamation-circle" label="Support" expanded={expanded} onClick={() => {}} />
+          {/* <MenuItemWithIcon icon="fas fa-cog" label="Settings" expanded={expanded} onClick={() => {}} />*/}
+          {/* <MenuItemWithIcon icon="fas fa-exclamation-circle" label="Support" expanded={expanded} onClick={() => {}} /> */}
         </Footer>
       </Container>
     </div>

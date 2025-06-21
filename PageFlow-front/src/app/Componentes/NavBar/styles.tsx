@@ -34,3 +34,14 @@ export const IconButton = tw.button`
   hover:text-gray-300
   transition-colors
 `;
+
+export const BarraSuperior = tw.div`
+  bg-[#2F2E41]
+  dark:bg-[#1e1e2f]
+  h-[150px]
+  pl-16            
+  mt-16          
+  flex
+  items-end
+  font-poppins
+`;

@@ -61,16 +61,16 @@ export default function Login() {
       <RightSection>
         <SignInContainer>
           <TitleGroup>
-            <Title>Sign In</Title>
-            <Subtitle>Sign in with Open Account</Subtitle>
+            <Title>Entrar</Title>
+            <Subtitle>Acesse com sua conta</Subtitle>
           </TitleGroup>
 
           <ButtonGroup>
             <Button className="google">
-              <i className="fab fa-google mr-2"></i> Continue with Google
+              <i className="fab fa-google mr-2"></i> Continue com Google
             </Button>
             <Button className="facebook">
-              <i className="fab fa-facebook-f mr-2"></i> Continue with Facebook
+              <i className="fab fa-facebook-f mr-2"></i> Continue com Facebook
             </Button>
           </ButtonGroup>
 
@@ -82,7 +82,7 @@ export default function Login() {
         </SignInContainer>
 
         <InputGroup>
-          <label className="text-xl">Email address</label>
+          <label className="text-xl">Email</label>
           <InputContainer>
             <InputIcon>
               <i className="fa-solid fa-envelope"></i>
@@ -90,7 +90,7 @@ export default function Login() {
             <InputField type="email" name="email" placeholder="Email ..." value={form.email} onChange={handleChange} />
           </InputContainer>
 
-          <label className="text-xl mt-4">Password</label>
+          <label className="text-xl mt-4">Senha</label>
           <InputContainer>
             <InputIcon>
               <i className="fa-solid fa-lock"></i>
@@ -98,18 +98,18 @@ export default function Login() {
             <InputField
               type="password"
               name="password"
-              placeholder="Password ..."
+              placeholder="Senha ..."
               value={form.password}
               onChange={handleChange}
             />
           </InputContainer>
 
-          <SignInButton onClick={handleSubmit}>Sign In</SignInButton>
+          <SignInButton onClick={handleSubmit}>Entrar</SignInButton>
 
           <RegisterText>
-            Don&apos;t have an account?
+            Ainda não tem uma conta?
             <Link href="/Cadastro">
-              <span className="text-blue-900"> Create one</span>
+              <span className="text-blue-900">Crie uma</span>
             </Link>
           </RegisterText>
         </InputGroup>
