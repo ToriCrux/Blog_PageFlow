@@ -24,13 +24,18 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
-      - name: Clear Maven Cache
-        run: rm -rf ~/.m2/repository
-
-      - name: Install Dependencies
-        run: mvn dependency:purge-local-repository clean install
-
-      - name: Run Tests with Coverage
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+  
+      - name: Instalar Dependências
+        run: mvn dependency:resolve
+  
+      - name: Executar Testes com Cobertura
         run: mvn clean verify
 
       - name: Gerar selo (badge) do JaCoCo
