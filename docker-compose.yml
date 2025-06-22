@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Serviço para a aplicação Spring Boot (API)
+  # Serviço para a aplicação Spring Boot
   api:
     build:
       context: ./PageFlow-api
@@ -10,16 +10,16 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/pageflow
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:postgresql://db:5432/pageflow} 
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-user}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-password} 
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-create} 
     depends_on:
       - db
     networks:
       - blog-network
 
-  # Serviço para a aplicação Next.js (Frontend)
+  # Serviço para a aplicação Next.js
   front:
     build:
       context: ./PageFlow-front
@@ -28,20 +28,20 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_API_URL: http://api:8080
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://api:8080} 
     depends_on:
       - api
     networks:
       - blog-network
 
-  # Serviço para o banco de dados PostgreSQL
+  # Serviço para o POSTGRESQL
   db:
     image: postgres:latest
     container_name: blog-pageflow-db
     environment:
-      POSTGRES_DB: pageflow
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB:-pageflow}
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
@@ -54,8 +54,8 @@ services:
     image: dpage/pgadmin4
     container_name: blog-pageflow-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
     ports:
       - "5050:80"
     depends_on:
