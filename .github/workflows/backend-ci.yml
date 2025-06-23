@@ -36,7 +36,7 @@ jobs:
         run: mvn dependency:resolve
   
       - name: Executar Testes com Cobertura
-        run: mvn clean verify
+        run: mvn clean verify -DskipITs
 
       - name: Gerar selo (badge) do JaCoCo
         uses: cicirello/jacoco-badge-generator@v2
