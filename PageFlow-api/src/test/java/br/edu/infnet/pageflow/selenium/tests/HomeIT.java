@@ -12,7 +12,7 @@ import org.openqa.selenium.WebDriver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class HomeTests {
+public class HomeIT {
 
     private WebDriver driver;
     private LoginPage loginPage;

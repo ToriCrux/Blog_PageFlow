@@ -148,6 +148,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -159,8 +160,16 @@
 							<goal>prepare-agent</goal>
 						</goals>
 						<configuration>
-							<destFile>${project.build.directory}/jacoco.exec</destFile>
 							<propertyName>surefireArgLine</propertyName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>prepare-agent-integration</id>
+						<goals>
+							<goal>prepare-agent-integration</goal>
+						</goals>
+						<configuration>
+							<propertyName>failsafeArgLine</propertyName>
 						</configuration>
 					</execution>
 					<execution>
@@ -185,12 +194,23 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.4.0</version>
+				<version>3.4.0</version> <configuration>
+				<argLine>@{surefireArgLine}</argLine> </configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.5.3</version> <executions>
+				<execution>
+					<goals>
+						<goal>integration-test</goal>
+						<goal>verify</goal>
+					</goals>
+				</execution>
+			</executions>
 				<configuration>
-					<argLine>
-						${surefireArgLine} -javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.15.11/byte-buddy-agent-1.15.11.jar -Xshare:off
-					</argLine>
-				</configuration>
+					<argLine>@{failsafeArgLine}</argLine> </configuration>
 			</plugin>
 		</plugins>
 	</build>

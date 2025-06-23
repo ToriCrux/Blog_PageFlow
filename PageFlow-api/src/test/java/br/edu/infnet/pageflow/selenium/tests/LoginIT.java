@@ -9,11 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
-import java.net.MalformedURLException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LoginTests {
+public class LoginIT {
 
     private WebDriver driver;
     private LoginPage loginPage;
