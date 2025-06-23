@@ -181,6 +181,7 @@
 						<configuration>
 							<outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
 							<formats>
+								<format>HTML</format>
 								<format>CSV</format>
 							</formats>
 						</configuration>
