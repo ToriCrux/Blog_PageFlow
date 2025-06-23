@@ -4,6 +4,7 @@
 import { MenuItem, IconWrapper, IconLabel } from "./styles";
 
 interface MenuItemWithIconProps {
+  id:string;
   icon: string;
   label: string;
   selected?: boolean;

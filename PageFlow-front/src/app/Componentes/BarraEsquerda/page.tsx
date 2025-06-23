@@ -67,6 +67,7 @@ export default function BarraEsquerda() {
           )}
 
           <MenuItemWithIcon
+              id="btnHome"
             icon="fas fa-home"
             label="Home"
             expanded={expanded}
@@ -80,12 +81,14 @@ export default function BarraEsquerda() {
             onClick={() => handleGoTo("/Search")}
           />*/}
           <MenuItemWithIcon
+              id="btnCategories"
             icon="fas fa-layer-group"
             label="Categorias"
             expanded={expanded}
             onClick={() => handleGoTo("/Categorias")}
           />
           <MenuItemWithIcon
+              id="btnUser"
             icon="fas fa-user"
             label="Usuário"
             expanded={expanded}
@@ -93,6 +96,7 @@ export default function BarraEsquerda() {
             onClick={() => handleGoTo("/User")}
           />
           <MenuItemWithIcon
+              id="btnLogin"
             icon="fas fa-right-from-bracket"
             label="Sair"
             expanded={expanded}
