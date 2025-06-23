@@ -68,7 +68,7 @@ export default function PostContainer({ searchTerm }: PostContainerProps) {
       {filteredPosts
         .filter((post) => post.status === "PUBLISHED")
         .map((post) => (
-          <PostWrapper key={post.id} className="mb-8">
+          <PostWrapper id={post.id} key={post.id} className="mb-8">
             <PostHeader className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <AuthorImage />

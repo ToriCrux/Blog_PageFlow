@@ -20,7 +20,7 @@ public class LoginTests {
     private String baseUrl = "http://localhost:3000/";
 
     @BeforeEach
-    void setUp() throws MalformedURLException {
+    void setUp(){
         driver = WebDriverFactory.getDriver();
         loginPage = new LoginPage(driver);
         loginPage.navigateTo(baseUrl);

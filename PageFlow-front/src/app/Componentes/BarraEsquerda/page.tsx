@@ -96,7 +96,7 @@ export default function BarraEsquerda() {
             onClick={() => handleGoTo("/User")}
           />
           <MenuItemWithIcon
-              id="btnLogin"
+              id="btnLogout"
             icon="fas fa-right-from-bracket"
             label="Sair"
             expanded={expanded}

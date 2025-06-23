@@ -14,6 +14,7 @@ public class LoginPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
+    private final By pageTitle = By.tagName("h1");
     private final By emailField = By.name("email");
     private final By passwordField = By.name("password");
     private final By loginButton = By.xpath("//button[text()='Entrar']"); // Finds a button with text 'Entrar'
@@ -56,5 +57,10 @@ public class LoginPage {
         alert.accept();
 
         return alertText;
+    }
+
+    public String getPageTitleText() {
+        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(pageTitle));
+        return titleElement.getText();
     }
 }

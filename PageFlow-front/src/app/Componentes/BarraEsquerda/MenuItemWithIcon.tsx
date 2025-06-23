@@ -13,6 +13,7 @@ interface MenuItemWithIconProps {
 }
 
 export function MenuItemWithIcon({
+    id,
   icon,
   label,
   selected,
@@ -20,7 +21,7 @@ export function MenuItemWithIcon({
   onClick,
 }: MenuItemWithIconProps) {
   return (
-    <MenuItem $selected={selected} onClick={onClick}>
+    <MenuItem id={id} $selected={selected} onClick={onClick}>
       <IconWrapper><i className={icon} /></IconWrapper>
       {expanded && <IconLabel>{label}</IconLabel>}
     </MenuItem>

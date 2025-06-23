@@ -25,6 +25,7 @@ export default function CriarPost() {
     <div className={poppins.className}>
       <PostContainer>
         <input
+            id="post-titulo"
           type="text"
           placeholder="Title..."
           value={title}
@@ -49,6 +50,7 @@ export default function CriarPost() {
         />
 
         <select
+            id="post-select"
           aria-label="Selecionar categoria"
           value={selectedCategoria ?? ""}
           onChange={(e) => setSelectedCategoria(Number(e.target.value))}
@@ -79,7 +81,7 @@ export default function CriarPost() {
             </ActionButton>
           </div>
 
-          <SendButton onClick={handleSend}>
+          <SendButton id="send-button" onClick={handleSend}>
             <i className="fas fa-paper-plane" />
           </SendButton>
         </ActionsRow>
