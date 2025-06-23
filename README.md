@@ -1,2 +1,2 @@
-[![PageFlow CI](https://github.com/ToriCrux/Blog_PageFlow/actions/workflows/dev-ci.yml/badge.svg?branch=dev)](https://github.com/ToriCrux/Blog_PageFlow/actions/workflows/dev-ci.yml)
-[![PageFlow CI](https://github.com/ToriCrux/Blog_PageFlow/actions/workflows/dev-ci.yml/badge.svg?branch=main)](https://github.com/ToriCrux/Blog_PageFlow/actions/workflows/dev-ci.yml)
+[![Main CI](https://github.com/ToriCrux/Blog_PageFlow/actions/workflows/main-ci.yml/badge.svg)](https://github.com/ToriCrux/Blog_PageFlow/actions/workflows/main-ci.yml)
+![JaCoCo Coverage](https://raw.githubusercontent.com/ToriCrux/Blog_PageFlow/dev/PageFlow-api/.github/badges/jacoco.svg)
