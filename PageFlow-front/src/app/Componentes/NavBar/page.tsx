@@ -12,7 +12,8 @@ export default function NavBar() {
       <Container>
         <LogoArea>
           <Image src="/planeta_logo.svg" alt="Logo" width={25} height={25} />
-          <Image 
+          <Image
+              id="blog-logo-titulo"
             src="/titulo_logo.svg" 
             alt="Logo" 
             width={120} 
