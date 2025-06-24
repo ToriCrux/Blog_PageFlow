@@ -179,4 +179,140 @@ public class PasswordResetTokenTests {
         assertThat(token.getExpiryDate()).isAfter(originalExpiry);
     }
 
+    @Test
+    void testEquals_sameInstance() {
+        PasswordResetToken token = new PasswordResetToken();
+        assertEquals(token, token);
+    }
+
+    @Test
+    void testEquals_nullObject() {
+        PasswordResetToken token = new PasswordResetToken();
+        assertNotEquals(token, null);
+    }
+
+    @Test
+    void testEquals_differentClass() {
+        PasswordResetToken token = new PasswordResetToken();
+        assertNotEquals(token, "not a token");
+    }
+
+    @Test
+    void testEquals_expiryDateNullInThis_notInOther() {
+        PasswordResetToken token1 = new PasswordResetToken();
+        token1.setToken("abc");
+        token1.setBlogUser(new BlogUser());
+
+        PasswordResetToken token2 = new PasswordResetToken();
+        token2.setToken("abc");
+        token2.setBlogUser(new BlogUser());
+        token2.setExpiryDate(new Date());
+
+        assertNotEquals(token1, token2);
+    }
+
+    @Test
+    void testEquals_expiryDateDifferent() {
+        PasswordResetToken token1 = new PasswordResetToken();
+        token1.setExpiryDate(new Date(1000));
+        token1.setToken("abc");
+        token1.setBlogUser(new BlogUser());
+
+        PasswordResetToken token2 = new PasswordResetToken();
+        token2.setExpiryDate(new Date(2000));
+        token2.setToken("abc");
+        token2.setBlogUser(new BlogUser());
+
+        assertNotEquals(token1, token2);
+    }
+
+    @Test
+    void testEquals_tokenNullInThis_notInOther() {
+        PasswordResetToken token1 = new PasswordResetToken();
+        token1.setExpiryDate(new Date());
+        token1.setBlogUser(new BlogUser());
+
+        PasswordResetToken token2 = new PasswordResetToken();
+        token2.setExpiryDate(token1.getExpiryDate());
+        token2.setToken("xyz");
+        token2.setBlogUser(new BlogUser());
+
+        assertNotEquals(token1, token2);
+    }
+
+    @Test
+    void testEquals_tokenDifferent() {
+        PasswordResetToken token1 = new PasswordResetToken();
+        token1.setExpiryDate(new Date());
+        token1.setToken("abc");
+        token1.setBlogUser(new BlogUser());
+
+        PasswordResetToken token2 = new PasswordResetToken();
+        token2.setExpiryDate(token1.getExpiryDate());
+        token2.setToken("xyz");
+        token2.setBlogUser(new BlogUser());
+
+        assertNotEquals(token1, token2);
+    }
+
+    @Test
+    void testEquals_blogUserNullInThis_notInOther() {
+        PasswordResetToken token1 = new PasswordResetToken();
+        token1.setExpiryDate(new Date());
+        token1.setToken("abc");
+
+        PasswordResetToken token2 = new PasswordResetToken();
+        token2.setExpiryDate(token1.getExpiryDate());
+        token2.setToken("abc");
+        token2.setBlogUser(new BlogUser());
+
+        assertNotEquals(token1, token2);
+    }
+
+    @Test
+    void testEquals_blogUserDifferent() {
+        BlogUser user1 = new BlogUser();
+        user1.setId(1);
+        BlogUser user2 = new BlogUser();
+        user2.setId(2);
+
+        PasswordResetToken token1 = new PasswordResetToken();
+        token1.setExpiryDate(new Date());
+        token1.setToken("abc");
+        token1.setBlogUser(user1);
+
+        PasswordResetToken token2 = new PasswordResetToken();
+        token2.setExpiryDate(token1.getExpiryDate());
+        token2.setToken("abc");
+        token2.setBlogUser(user2);
+
+        assertNotEquals(token1, token2);
+    }
+
+    @Test
+    void testEquals_allEqual() {
+        BlogUser user = new BlogUser();
+        user.setId(1);
+        Date date = new Date();
+
+        PasswordResetToken token1 = new PasswordResetToken();
+        token1.setExpiryDate(date);
+        token1.setToken("abc");
+        token1.setBlogUser(user);
+
+        PasswordResetToken token2 = new PasswordResetToken();
+        token2.setExpiryDate(date);
+        token2.setToken("abc");
+        token2.setBlogUser(user);
+
+        assertEquals(token1, token2);
+        assertEquals(token1.hashCode(), token2.hashCode());
+    }
+
+    @Test
+    void testHashCode_withNullFields() {
+        PasswordResetToken token = new PasswordResetToken();
+        assertDoesNotThrow(token::hashCode);
+    }
+
 }
