@@ -261,7 +261,7 @@ public class BlogUserTests {
         visitor.setEmail(email);
         visitor.setPassword(password);
         visitor.setRole(BlogUserRoles.VISITOR);
-        visitor.setCanComment(true);
+        visitor.setCanComment(Boolean.TRUE);
 
 
         assertThat(visitor.getRole()).isEqualTo(BlogUserRoles.VISITOR);

@@ -3,8 +3,10 @@ package br.edu.infnet.pageflow.entities;
 import br.edu.infnet.pageflow.security.jwt.JwtUtil;
 import br.edu.infnet.pageflow.utils.BlogUserRoles;
 import net.jqwik.api.*;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -129,6 +131,52 @@ public class PasswordResetTokenTests {
 
         assertNotNull(resetToken);
         assertSame(resetToken.getToken(), token);
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        BlogUser user = new BlogUser();
+        user.setId(1);
+        user.setUsername("testuser");
+
+        PasswordResetToken token1 = new PasswordResetToken("abc123", user);
+        PasswordResetToken token2 = new PasswordResetToken("abc123", user);
+
+        assertThat(token1).isEqualTo(token2);
+        assertThat(token1.hashCode()).isEqualTo(token2.hashCode());
+    }
+
+    @Test
+    void testNotEqualsDifferentToken() {
+        BlogUser user = new BlogUser();
+        user.setId(1);
+
+        PasswordResetToken token1 = new PasswordResetToken("abc123", user);
+        PasswordResetToken token2 = new PasswordResetToken("xyz999", user);
+
+        assertThat(token1).isNotEqualTo(token2);
+    }
+
+    @Test
+    void testToStringContainsTokenAndDate() {
+        PasswordResetToken token = new PasswordResetToken("abc123");
+        String toString = token.toString();
+
+        assertThat(toString).contains("abc123");
+        assertThat(toString).contains("Expires");
+    }
+
+    @Test
+    void testUpdateTokenChangesTokenAndExpiry() throws InterruptedException {
+        PasswordResetToken token = new PasswordResetToken("initial");
+        Date originalExpiry = token.getExpiryDate();
+
+        Thread.sleep(10);
+
+        token.updateToken("updatedToken");
+
+        assertThat(token.getToken()).isEqualTo("updatedToken");
+        assertThat(token.getExpiryDate()).isAfter(originalExpiry);
     }
 
 }
