@@ -26,29 +26,33 @@ import java.util.Optional;
 public class DataLoader implements ApplicationRunner {
 
     @Autowired
-    private CategoryService categoryService;
+    CategoryService categoryService;
     @Autowired
-    private CommentService commentService;
+    CommentService commentService;
     @Autowired
-    private PostRepository postRepository;
+    PostRepository postRepository;
     @Autowired
-    private PostService postService;
+    PostService postService;
     @Autowired
-    private UserService userService;
+    UserService userService;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private TagService tagService;
+    TagService tagService;
     @Autowired
-    private CommentRepository commentRepository;
+    CommentRepository commentRepository;
     @Autowired
-    private PostCommentRelationRepository postCommentRelationRepository;
+    PostCommentRelationRepository postCommentRelationRepository;
+
+    protected InputStream getClassLoaderResourceAsStream() {
+        return getClass().getClassLoader().getResourceAsStream("mockupData.txt");
+    }
 
     @Override
     public void run(ApplicationArguments args) {
 
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("mockupData.txt");
+            InputStream inputStream = getClassLoaderResourceAsStream();
 
             if (inputStream == null) {
                 throw new FileNotFoundException("Arquivo mockupData.txt não encontrado em resources.");
