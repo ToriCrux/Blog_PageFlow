@@ -1,10 +1,10 @@
 package br.edu.infnet.pageflow.controller;
 
 import br.edu.infnet.pageflow.TestSecurityConfig;
+import br.edu.infnet.pageflow.dto.CommentRequest;
 import br.edu.infnet.pageflow.dto.PostRequest;
-import br.edu.infnet.pageflow.entities.Author;
-import br.edu.infnet.pageflow.entities.Category;
-import br.edu.infnet.pageflow.entities.Post;
+import br.edu.infnet.pageflow.dto.PostResponse;
+import br.edu.infnet.pageflow.entities.*;
 import br.edu.infnet.pageflow.repository.*;
 import br.edu.infnet.pageflow.security.jwt.JwtUtil;
 import br.edu.infnet.pageflow.service.AuthUserDetailsService;
@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -160,5 +161,111 @@ class PostControllerTest {
                         .with(jwt())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void testUpdateComment() throws Exception {
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setContent("Updated content");
+        commentRequest.setApproved(true);
+
+        Post post = new Post();
+        post.setId(1);
+        Comment comment = new Comment();
+        comment.setId(2);
+
+        when(postService.findById(1)).thenReturn(post);
+        when(postService.getCommentById(2)).thenReturn(comment);
+
+        mockMvc.perform(put("/api/v1/posts/1/2")
+                        .with(jwt())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(commentRequest)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDeleteComment() throws Exception {
+        Post post = new Post();
+        post.setId(1);
+        Comment comment = new Comment();
+        comment.setId(2);
+
+        when(postService.findById(1)).thenReturn(post);
+        when(postService.getCommentById(2)).thenReturn(comment);
+        doNothing().when(postService).deleteCommentFromPost(1, 2);
+
+        mockMvc.perform(delete("/api/v1/posts/1/2").with(jwt()))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void testAddComment() throws Exception {
+        CommentRequest commentRequest = new CommentRequest();
+        commentRequest.setContent("Nice post!");
+        commentRequest.setApproved(true);
+
+        Post post = new Post();
+        post.setId(1);
+        Comment comment = new Comment();
+        comment.setId(2);
+        PostResponse response = new PostResponse();
+
+        when(postService.findById(1)).thenReturn(post);
+        when(commentService.createComment(any(CommentRequest.class))).thenReturn(comment);
+        when(postService.addCommentToPost(1, 2)).thenReturn(response);
+
+        mockMvc.perform(post("/api/v1/posts/1/comment")
+                        .with(jwt())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(commentRequest)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testGetDraftPost() throws Exception {
+        BlogUser user = new BlogUser();
+        user.setId(1);
+        Optional<Post> draft = Optional.of(new Post());
+
+        when(userService.getUserByEmail(any())).thenReturn(user);
+        when(postService.getDraftPost(1)).thenReturn(draft);
+
+        mockMvc.perform(get("/api/v1/posts/draft").with(jwt()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testRemoveTag() throws Exception {
+        doNothing().when(postService).removeTagFromPost(1, 2);
+
+        mockMvc.perform(delete("/api/v1/posts/1/tags/2").with(jwt()))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void testGetPostsByCategory() throws Exception {
+        when(postService.findByCategoryName("tech")).thenReturn(List.of(new Post()));
+
+        mockMvc.perform(get("/api/v1/posts/search/tech").with(jwt()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testGetPostsByTag() throws Exception {
+        when(postService.findByTagName("java")).thenReturn(List.of(new Post()));
+
+        mockMvc.perform(get("/api/v1/posts/tagSearch/java").with(jwt()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testAddTag() throws Exception {
+        Post post = new Post();
+        post.setId(1);
+        when(postService.addTagToPost(1, 2)).thenReturn(post);
+
+        mockMvc.perform(post("/api/v1/posts/1/tags/2").with(jwt()))
+                .andExpect(status().isOk());
     }
 }
