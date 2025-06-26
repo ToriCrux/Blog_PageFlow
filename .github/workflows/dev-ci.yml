@@ -40,3 +40,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Build and start services with Docker Compose
         run: docker compose up --build -d
+
+  run-selenium-tests:
+    name: Run Selenium Tests
+    needs: build-and-run-compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      - name: Wait for services to be ready
+        run: sleep 60
+      - name: Listar containers Docker
+        run: docker ps -a
+      - name: Executar testes Selenium no container da API
+        run: |
+          docker compose exec -T api mvn clean verify
